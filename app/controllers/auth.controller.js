@@ -42,12 +42,12 @@ exports.signup = (req, res) => {
 };
 
 exports.signin = (req, res) => {
-  
+  /*
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
   res.header("Access-Control-Allow-Headers", "*");
   res.header("Content-Type", "application/json");
-  res.header("Accept", "application/json");
+  res.header("Accept", "application/json");*/
 
   const body =  req.body;
 

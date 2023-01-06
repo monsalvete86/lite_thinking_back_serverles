@@ -18,22 +18,16 @@ app.use(cors(corsOptions));
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Accept, Authorization");
+  res.header("Access-Control-Allow-Headers", "*");
   next()
 })
 
 // parse requests of content-type - application/json
-//app.use(express.json());
+app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
-//app.use(express.urlencoded({ extended: true }));
-//app.use(bodyParser.json({ strict: false }));
-app.use(helmet());
+app.use(express.urlencoded({ extended: true }));
 
-// compress all responses
-app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 // database
 const db = require("./app/models");
 const Role = db.role;
