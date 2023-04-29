@@ -42,15 +42,15 @@ exports.signup = (req, res) => {
 };
 
 exports.signin = (req, res) => {
-  /*
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header("Access-Control-Allow-Headers", "*");
-  res.header("Content-Type", "application/json");
-  res.header("Accept", "application/json");*/
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+  res.header('Access-Control-Allow-Credentials', true); 
+  /*res.header("Access-Control-Allow-Methods", "*");
+  res.header("Content-Type", "application/json");*/
+  //res.header("Accept", "application/json");
 
   const body =  req.body;
-
+  console.log('entraaaaaa');
   User.findOne({
     where: {
       username: "" + body.username
@@ -60,7 +60,6 @@ exports.signin = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: "User Not found." });
       }
-      
       var passwordIsValid = bcrypt.compareSync(
         body.password,
         user.password
@@ -82,15 +81,31 @@ exports.signin = (req, res) => {
         for (let i = 0; i < roles.length; i++) {
           authorities.push("ROLE_" + roles[i].name.toUpperCase());
         }
-        res.status(200).send({
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          roles: authorities,
-          companyId: user.companyId,
-          accessToken: token
-        });
+        return {
+          statusCode: 200,
+          body: JSON.stringify({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            roles: authorities,
+            companyId: user.companyId,
+            accessToken: token
+          }),
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Credentials": true,
+          },
+        };
       });
+      return res.status(200).json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        roles: authorities,
+        companyId: user.companyId,
+        accessToken: token
+      });
+      console.log('pasa hasta aca');
     })
     .catch(err => {
       res.status(500).send({ message: body.username });

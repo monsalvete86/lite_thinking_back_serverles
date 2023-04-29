@@ -4,7 +4,6 @@ const Op = db.Sequelize.Op;
 
 exports.allAccess = (req, res) => {
   return "Public Content.";
-
 };
 
 exports.findOne = (req, res) => {

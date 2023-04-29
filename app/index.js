@@ -8,15 +8,16 @@ const app = express();
 app.use(bodyParser.json({ strict: false }));
 
 var corsOptions = {
-  origin: "https://main.d8b91iarqpg5.amplifyapp.com"
+  // origin: "https://main.d8b91iarqpg5.amplifyapp.com"
+  origin: "http://localhost:8081"
 };
 
 app.use(cors(corsOptions));
 
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Methods', '*')
-  res.header('Access-Control-Allow-Headers', '*')
+  // res.header('Access-Control-Allow-Origin', '*')
+  //res.header('Access-Control-Allow-Methods', '*')
+  //res.header('Access-Control-Allow-Headers', '*')
   next()
 })
 

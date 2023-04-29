@@ -52,8 +52,7 @@ exports.findAll = (req, res) => {
 
 // Find a single company with an id
 exports.findOne = (req, res) => {
-  const params = JSON.parse(req.params);
-  const id = params.id;
+  const id = req.params.id;
 
   Company.findByPk(id)
     .then(data => {

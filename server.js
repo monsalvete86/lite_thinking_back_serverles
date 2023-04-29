@@ -1,24 +1,21 @@
 const express = require("express");
-//const express = require('serverless-express/express')
-//const slshttp = require('serverless-http')
-const helmet = require("helmet");
 const cors = require("cors");
-const bodyParser = require('body-parser');
-const compression = require('compression');
-
 
 const app = express();
 
 var corsOptions = {
-  origin: "https://main.d8b91iarqpg5.amplifyapp.com"
+  // origin: "https://main.d8b91iarqpg5.amplifyapp.com"
+  origin: "http://localhost:8081"
 };
 
 app.use(cors(corsOptions));
 
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header("Access-Control-Allow-Headers", "*");
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', '*')
+  res.header('Access-Control-Allow-Headers', '*')
+  res.header("Content-Type", "application/json");
+  res.header("Accept", "application/json");
   next()
 })
 
@@ -73,5 +70,3 @@ function initial() {
     name: "admin"
   });
 }
-
-module.exports = app;

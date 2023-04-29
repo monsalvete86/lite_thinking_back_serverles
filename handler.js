@@ -1,5 +1,4 @@
-
-
+'use strict';
 
 const serverless = require("serverless-http");
 const express = require("express");
@@ -7,7 +6,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const compression = require('compression');
-
+const { authJwt } = require("./app/middleware/index");
 const { verifySignUp } = require("./app/middleware");
 const userController = require("./app/controllers/user.controller");
 const companyControler = require("./app/controllers/company.controller");
@@ -37,32 +36,62 @@ require('./app/routes/company.routes')(app);
 */
 
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Headers', '*')
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header("Content-Type", "application/json");
+  /*res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD');
+  res.header('Allow', 'GET, POST, PUT, DELETE, OPTIONS, HEAD');*/
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+
   next()
 })
 
-app.use(helmet());
+//app.use(helmet());
 
 // compress all responses
-app.use(compression());
+//app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
 var corsOptions = {
   origin: "https://main.d8b91iarqpg5.amplifyapp.com",
+  allowOrigins: ["https://main.d8b91iarqpg5.amplifyapp.com"],
+  //origin: "http://localhost:8081",
   optionSuccessStatus: 200,
+  credentials: true,
+  methods: "GET,HEAD,PUT,OPTIONS,POST,DELETE",
+  allowedHeaders: [
+    "Access-Control-Allow-Headers",
+    "Origin",
+    "X-Requested-With",
+    "Content-Type",
+    "Accept",
+    "Authorization",
+    "token",
+    "Access-Control-Request-Method",
+    "Access-Control-Request-Headers",
+    "Access-Control-Allow-Credentials",
+  ],
 };
 
+const Auxcors = {
+    allRoutes: true,
+    allowOrigins: '*',
+    allowCredentials: true,
+    allowMethods: '*',
+    allowHeaders : '*'
+  }
 app.use(cors(corsOptions));
+//app.use(cors({ origin: true }));
 
-app.post("/api/auth/signin",  (req, res, next) => {
+
+app.post("/api/auth/signin", cors(),  (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "*");
-  res.header("Access-Control-Allow-Headers", "*");
-  res.header("Content-Type", "application/json");
-  res.header("Accept", "application/json");
+  //res.header("Content-Type", "application/json");
   return authController.signin(req, res); 
 });
 
@@ -78,14 +107,21 @@ app.post(
   
 app.get(
     "/api/company/:id",
-    [
-      verifySignUp.checkDuplicateUsernameOrEmail,
-      verifySignUp.checkRolesExisted
-    ],
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     (req, res, next) => {
-      return companyControler.signup(req, res);
+      return companyControler.findOne(req, res);
   });
 
+  
+  app.get(
+    "/api/user/:id",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    (req, res, next) => {
+      res.header("Access-Control-Allow-Origin", "*");
+      return userController.findOne(req, res);
+    }
+
+  );
 app.get("/test_all",  (req, res, next) => {
   return companyControler.findAll(req, res); 
 });
@@ -105,7 +141,7 @@ app.get("/hello", (req, res, next) => {
 
 app.use((req, res, next) => {
   return res.status(404).json({
-    error: "Not Found",
+    error: "Not Found 1",
   });
 });
 
