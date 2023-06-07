@@ -1,40 +1,43 @@
-const product = require("../controllers/product.controller.js");
+const cliente = require("../controllers/cliente.controller.js");
 const { authJwt } = require("../middleware/index.js");
 
-module.exports = function (app) {
-  app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Headers");
+module.exports = function(app) {
+  app.use(function(req, res, next) {
+    res.header(
+      "Access-Control-Allow-Headers"
+    );
     next();
   });
 
-  // Get Products
+  // Get Clientes
   app.get(
-    "/api/products",
+    "/api/clientes",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    product.findAll
+    cliente.findAll
   );
 
   app.post(
-    "/api/products",
+    "/api/clientes",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    product.create
+    cliente.create
   );
 
   app.get(
-    "/api/products/:id",
+    "/api/clientes/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    product.findOne
+    cliente.findOne
   );
 
   app.put(
-    "/api/products/:id",
+    "/api/clientes/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    product.update
+    cliente.update
   );
 
   app.delete(
-    "/api/products/:id",
+    "/api/clientes/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    product.delete
+    cliente.delete
   );
+
 };

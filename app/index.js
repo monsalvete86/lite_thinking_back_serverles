@@ -1,15 +1,14 @@
 //const express = require("express");
-const express = require('serverless-express/express')
+const express = require("serverless-express/express");
 const cors = require("cors");
-const bodyParser = require('body-parser');
-
+const bodyParser = require("body-parser");
 
 const app = express();
 app.use(bodyParser.json({ strict: false }));
 
 var corsOptions = {
   // origin: "https://main.d8b91iarqpg5.amplifyapp.com"
-  origin: "http://localhost:8081"
+  origin: "http://localhost:8081",
 };
 
 app.use(cors(corsOptions));
@@ -18,8 +17,8 @@ app.use(function (req, res, next) {
   // res.header('Access-Control-Allow-Origin', '*')
   //res.header('Access-Control-Allow-Methods', '*')
   //res.header('Access-Control-Allow-Headers', '*')
-  next()
-})
+  next();
+});
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -44,10 +43,13 @@ app.get("/", (req, res) => {
 });
 
 // routes
-require('./routes/auth.routes')(app);
-require('./routes/user.routes')(app);
-require('./routes/product.routes')(app);
-require('./routes/company.routes')(app);
+require("./routes/auth.routes")(app);
+require("./routes/user.routes")(app);
+require("./routes/company.routes")(app);
+require("./routes/category.routes")(app);
+require("./routes/product.routes")(app);
+require("./routes/cliente.routes")(app);
+require("./routes/dailyList.routes")(app);  
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
@@ -59,17 +61,17 @@ app.listen(PORT, () => {
 function initial() {
   Role.create({
     id: 1,
-    name: "user"
+    name: "user",
   });
- 
+
   Role.create({
     id: 2,
-    name: "moderator"
+    name: "moderator",
   });
- 
+
   Role.create({
     id: 3,
-    name: "admin"
+    name: "admin",
   });
 }
 
