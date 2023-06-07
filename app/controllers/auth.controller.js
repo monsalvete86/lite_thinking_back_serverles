@@ -108,6 +108,7 @@ exports.signin = (req, res) => {
       console.log('pasa hasta aca');
     })
     .catch(err => {
+      console.log('error en el catch ')
       res.status(500).send({ message: body.username });
     });
 };

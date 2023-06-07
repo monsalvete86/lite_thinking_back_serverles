@@ -1,23 +1,18 @@
 const config = require("../config/db.config.js");
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(
-  config.DB,
-  config.USER,
-  config.PASSWORD,
-  {
-    host: config.HOST,
-    dialect: config.dialect,
-    operatorsAliases: false,
+const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
+  host: config.HOST,
+  dialect: config.dialect,
+  operatorsAliases: false,
 
-    pool: {
-      max: config.pool.max,
-      min: config.pool.min,
-      acquire: config.pool.acquire,
-      idle: config.pool.idle
-    }
-  }
-);
+  pool: {
+    max: config.pool.max,
+    min: config.pool.min,
+    acquire: config.pool.acquire,
+    idle: config.pool.idle,
+  },
+});
 
 const db = {};
 
@@ -25,30 +20,35 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.product = require("./product.model.js")(sequelize, Sequelize);
+db.cliente = require("./cliente.model.js")(sequelize, Sequelize);
+db.category = require("./category.model.js")(sequelize, Sequelize);
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.role = require("../models/role.model.js")(sequelize, Sequelize);
 db.company = require("../models/company.model.js")(sequelize, Sequelize);
+db.dailyList = require("../models/dailyList.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",
   foreignKey: "roleId",
-  otherKey: "userId"
+  otherKey: "userId",
 });
 
 db.user.belongsToMany(db.role, {
   through: "user_roles",
   foreignKey: "userId",
-  otherKey: "roleId"
+  otherKey: "roleId",
 });
 
-
-
 db.company.hasMany(db.product, {
-  foreignKey: 'companyId'
+  foreignKey: "companyId",
 });
 
 db.product.belongsTo(db.company);
 
+db.cliente.hasMany(db.cliente, {
+});
+
+db.cliente.belongsTo(db.cliente);
 
 db.ROLES = ["user", "admin", "moderator"];
 
