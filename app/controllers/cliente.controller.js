@@ -1,122 +1,123 @@
 const db = require("../models");
-const Product = db.product;
+const Cliente = db.cliente;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Product
+// Create and Save a new Cliente
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.productName || !req.body.code || !req.body.stock ) {
+  if (!req.body.nombre || !req.body.apellido || !req.body.telefono || !req.body.direccion|| !req.body.ciudad ) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
     return;
   }
 
-  // Create a Product 
-  const product = {
-    code: req.body.code,
-    productName: req.body.productName,
-    stock: req.body.stock,
-    companyId: req.body.companyId,
+  // Create a Cliente 
+  const cliente = {
+    nombre: req.body.nombre,
+    apellido: req.body.apellido,
+    telefono: req.body.telefono,
+    direccion: req.body.direccion,
+    ciudad: req.body.ciudad,
   };
 
-  // Save Product in the database
-  Product.create(product)
+  // Save Cliente in the database
+  Cliente.create(cliente)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Product."
+          err.message || "Some error occurred while creating the Cliente."
       });
     });
 };
 
-// Retrieve all Products from the database.
+// Retrieve all Clientes from the database.
 exports.findAll = (req, res) => {
-  const productName = req.query.productName;
-  var condition = productName ? { productName: { [Op.like]: `%${productName}%` } } : null;
+  const nombre = req.query.nombre;
+  var condition = nombre ? { nombre: { [Op.like]: `%${nombre}%` } } : null;
 
-  Product.findAll({ where: condition })
+  Cliente.findAll({ where: condition })
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving products."
+          err.message || "Some error occurred while retrieving clientes."
       });
     });
 };
 
-// Find a single Product with an id
+// Find a single Cliente with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Product.findByPk(id)
+  Cliente.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Product with id=${id}.`
+          message: `Cannot find Cliente with id=${id}.`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Product with id=" + id
+        message: "Error retrieving Cliente with id=" + id
       });
     });
 };
 
-// Update a Product by the id in the request
+// Update a Cliente by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Product.update(req.body, {
+  Cliente.update(req.body, {
     where: { id: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Product was updated successfully."
+          message: "Cliente was updated successfully."
         });
       } else {
         res.send({
-          message: `Cannot update Product with id=${id}. Maybe Product was not found or req.body is empty!`
+          message: `Cannot update Cliente with id=${id}. Maybe Cliente was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Product with id=" + id
+        message: "Error updating Cliente with id=" + id
       });
     });
 };
 
-// Delete a Product with the specified id in the request
+// Delete a Cliente with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Product.destroy({
+  Cliente.destroy({
     where: { id: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Product was deleted successfully!"
+          message: "Cliente was deleted successfully!"
         });
       } else {
         res.send({
-          message: `Cannot delete Product with id=${id}. Maybe Product was not found!`
+          message: `Cannot delete Cliente with id=${id}. Maybe Cliente was not found!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete Product with id=" + id
+        message: "Could not delete Cliente with id=" + id
       });
     });
 };
