@@ -1,12 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
-  const DailyList = sequelize.define("daily_list", {
+  const DailyList = sequelize.define("daily_lists", {
     id: {
       primaryKey: true,
       autoIncrement: true,
       type: Sequelize.INTEGER,
-    },
-    createdAt: {
-      type: Sequelize.STRING,
     },
     userId: {
       type: Sequelize.INTEGER,

@@ -1,4 +1,4 @@
-const dailyList = require("../controllers/dailyList.controller.js");
+const subscription = require("../controllers/subscription.controller.js");
 const { authJwt } = require("../middleware/index.js");
 
 module.exports = function (app) {
@@ -7,27 +7,34 @@ module.exports = function (app) {
     next();
   });
 
+  // Get Products
   app.get(
-    "api/dailylists",
+    "/api/subscriptions",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.findAll
+    subscription.findAll
   );
 
   app.post(
-    "api/dailylists",
+    "/api/subscriptions",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.create
+    subscription.create
+  );
+
+  app.get(
+    "/api/subscriptions/:id",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    subscription.findOne
   );
 
   app.put(
-    "/api/dailylists/:id",
+    "/api/subscriptions/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.update
+    subscription.update
   );
 
   app.delete(
-    "/api/dailylists/:id",
+    "/api/subscriptions/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.delete
+    subscription.delete
   );
 };

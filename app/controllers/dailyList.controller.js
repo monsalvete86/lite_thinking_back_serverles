@@ -38,6 +38,27 @@ exports.findAll = (req, res) => {
     });
 };
 
+// Find a single Product with an id
+exports.findOne = (req, res) => {
+  const id = req.params.id;
+
+  DailyList.findByPk(id)
+    .then(data => {
+      if (data) {
+        res.send(data);
+      } else {
+        res.status(404).send({
+          message: `Cannot find List with id=${id}.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving List with id=" + id
+      });
+    });
+};
+
 exports.update = (req, res) => {
   const id = req.params.id;
 
