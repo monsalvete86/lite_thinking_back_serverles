@@ -4,12 +4,12 @@ import clienteModel from './cliente.model';
 import dailyListModel from './dailyList.model';
 
 module.exports = (sequelize,Sequelize) =>{
-    const ClientDailyList = sequelize.define('dailyClientList',{
+    const ClientDailyList = sequelize.define('client_daily_lists',{
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true,
-          },
+          },        
 
     })
 
@@ -18,5 +18,3 @@ module.exports = (sequelize,Sequelize) =>{
 
     return ClientDailyList;
 }
-
-
