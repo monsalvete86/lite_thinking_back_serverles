@@ -1,4 +1,4 @@
-const dailyList = require("../controllers/dailyList.controller.js");
+const processor = require("../controllers/processor.controller.js");
 const { authJwt } = require("../middleware/index.js");
 
 module.exports = function (app) {
@@ -7,27 +7,34 @@ module.exports = function (app) {
     next();
   });
 
+  // Get Products
   app.get(
-    "api/dailylists",
+    "/api/processors",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.findAll
+    processor.findAll
   );
 
   app.post(
-    "api/dailylists",
+    "/api/processors",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.create
+    processor.create
+  );
+
+  app.get(
+    "/api/processors/:id",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    processor.findOne
   );
 
   app.put(
-    "/api/dailylists/:id",
+    "/api/processors/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.update
+    processor.update
   );
 
   app.delete(
-    "/api/dailylists/:id",
+    "/api/processors/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.delete
+    processor.delete
   );
 };

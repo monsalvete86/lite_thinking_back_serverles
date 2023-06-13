@@ -135,9 +135,10 @@ app.get("/hello", (req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  return res.status(404).json({
-    error: "Not Found 1",
-  });
+  return res;
+  // return res.status(404).json({
+  //   error: "Not Found",
+  // });
 });
 
 module.exports.handler = serverless(app);
