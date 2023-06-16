@@ -28,6 +28,7 @@ db.company = require("../models/company.model.js")(sequelize, Sequelize);
 db.dailyList = require("./dailyList.model.js")(sequelize, Sequelize);
 db.processor = require("./processor.model.js")(sequelize, Sequelize);
 db.subscription = require("./subscription.model.js")(sequelize, Sequelize);
+db.pago = require("./pago.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",
@@ -46,11 +47,6 @@ db.company.hasMany(db.product, {
 });
 
 db.product.belongsTo(db.company);
-
-db.cliente.hasMany(db.cliente, {
-});
-
-db.cliente.belongsTo(db.cliente);
 
 db.ROLES = ["user", "admin", "moderator"];
 
