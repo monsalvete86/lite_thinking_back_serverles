@@ -1,4 +1,4 @@
-const dailyList = require("../controllers/dailyList.controller.js");
+const pago = require("../controllers/pago.controller.js");
 const { authJwt } = require("../middleware/index.js");
 
 module.exports = function (app) {
@@ -7,39 +7,34 @@ module.exports = function (app) {
     next();
   });
 
+  // Get Pagos
   app.get(
-    "api/dailylists",
+    "/api/pagos",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.findAll
+    pago.findAll
   );
 
   app.post(
-    "api/dailylists",
+    "/api/pagos",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.create
-  ); 
-
-  app.put(
-    "/api/dailylists/:id",
-    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.update
+    pago.create
   );
 
-  app.delete(
-    "/api/dailylists/:id",
+  app.get(
+    "/api/pagos/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.delete
+    pago.findOne
   );
 
   app.put(
-    "/api/dailylists/:id",
+    "/api/pagos/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.update
+    pago.update
   );
 
   app.delete(
-    "/api/dailylists/:id",
+    "/api/pagos/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    dailyList.delete
+    pago.delete
   );
 };

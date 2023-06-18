@@ -35,6 +35,7 @@ require("./app/routes/category.routes")(app);
 require("./app/routes/cliente.routes")(app);
 require("./app/routes/company.routes")(app);
 require("./app/routes/dailyList.routes")(app);
+require("./app/routes/pago.routes")(app);
 */
 app.use(function (req, res, next) {
   /*res.header('Access-Control-Allow-Origin', '*');
