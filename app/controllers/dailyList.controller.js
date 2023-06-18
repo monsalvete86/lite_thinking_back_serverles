@@ -22,7 +22,7 @@ exports.create = (req, res) => {
 
 // Retrieve all DailyList from the database.
 exports.findAll = (req, res) => {
-  console.log("dailyyyyyyyyy");
+  //console.log("daily");
 
   const createdAt = req.query.createdAt ?? Date();
   var condition = createdAt ? { createdAt: { [Op.gte]: createdAt } } : null;

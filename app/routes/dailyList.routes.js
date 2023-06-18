@@ -17,7 +17,7 @@ module.exports = function (app) {
     "api/dailylists",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     dailyList.create
-  );
+  ); 
 
   app.put(
     "/api/dailylists/:id",
