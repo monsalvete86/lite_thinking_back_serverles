@@ -12,6 +12,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.BOOLEAN,
       default: true,
     },
+    date:{
+      type: Sequelize.STRING,
+      default:null
+    }
   });
 
   return DailyList;
