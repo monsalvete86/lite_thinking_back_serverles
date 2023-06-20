@@ -13,16 +13,18 @@ module.exports = (sequelize, Sequelize) => {
     subscripcion: {
       type: Sequelize.STRING
     },
-    rejistroActivo: {
+    metodoPago: {
       type: Sequelize.STRING
     },
-    valorPago: {
+    importe: {
+      type: Sequelize.STRING
+    },
+    status: {
       type: Sequelize.STRING
     },
     fechaPago: {
       type: Sequelize.STRING
     },
-  
   });
 
   return Pago;
