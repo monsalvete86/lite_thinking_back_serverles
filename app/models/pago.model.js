@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
     cliente: {
       type: Sequelize.STRING
     },
-    subscripcion: {
+    subscription: {
       type: Sequelize.STRING
     },
     metodoPago: {
