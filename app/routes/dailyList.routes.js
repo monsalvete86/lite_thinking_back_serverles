@@ -8,13 +8,13 @@ module.exports = function (app) {
   });
 
   app.get(
-    "api/dailylists",
+    "/api/daily-lists",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     dailyList.findAll
   );
 
   app.post(
-    "api/dailylists",
+    "/api/daily-lists",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     dailyList.create
   ); 
@@ -27,6 +27,24 @@ module.exports = function (app) {
 
   app.delete(
     "/api/dailylists/:id",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    dailyList.delete
+  );
+
+  app.get(
+    "/api/daily-lists/:id",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    dailyList.findOne
+  );
+
+  app.put(
+    "/api/daily-lists/:id",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    dailyList.update
+  );
+
+  app.delete(
+    "/api/daily-lists/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     dailyList.delete
   );

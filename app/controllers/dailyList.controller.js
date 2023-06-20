@@ -4,9 +4,9 @@ const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
   const data = {
-    createdAt: Date(),
     userId: req.body.userId,
     status: true,
+    date: req.body.date
   };
 
   DailyList.create(data)
@@ -22,9 +22,8 @@ exports.create = (req, res) => {
 
 // Retrieve all DailyList from the database.
 exports.findAll = (req, res) => {
-  //console.log("daily");
-
-  const createdAt = req.query.createdAt ?? Date();
+  console.log('entrando a dailulist');
+  const createdAt = req.query.createdAt ?? null;
   var condition = createdAt ? { createdAt: { [Op.gte]: createdAt } } : null;
 
   DailyList.findAll({ where: condition })
