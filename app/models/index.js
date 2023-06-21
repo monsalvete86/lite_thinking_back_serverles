@@ -48,8 +48,10 @@ db.company.hasMany(db.product, {
 
 db.product.belongsTo(db.company);
 
-db.cliente.belongsToMany(db.dailyList, { through: db.clientDailyList });
-db.dailyList.belongsToMany(db.cliente, { through: db.clientDailyList });
+db.cliente.belongsToMany(db.user, { through: db.clientDailyList });
+db.user.belongsToMany(db.cliente, { through: db.clientDailyList, foreignKey: 'operatorId' });
+db.clientDailyList.belongsTo(db.dailyList)
+db.user.hasMany(db.dailyList)
 
 db.ROLES = [ 'user', 'admin', 'moderator' ];
 
