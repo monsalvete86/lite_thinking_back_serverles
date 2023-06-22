@@ -25,9 +25,6 @@ module.exports = (sequelize, Sequelize) => {
 			type: Sequelize.INTEGER
 		}
 	});
-
-	// Cliente.associate = (models) => {
-	// };
-
+	
 	return Cliente;
 };

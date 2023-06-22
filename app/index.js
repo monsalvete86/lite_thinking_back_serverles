@@ -49,6 +49,7 @@ require("./routes/company.routes")(app);
 require("./routes/product.routes")(app);
 require("./routes/cliente.routes")(app);
 require("./routes/dailyList.routes")(app);  
+// require("./routes/clientDailyList.routes")(app);  
 require("./routes/processor.routes")(app);  
 require("./routes/subscription.routes")(app);
 require("./routes/pago.routes")(app);  

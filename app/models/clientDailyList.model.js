@@ -1,5 +1,3 @@
-const { DataTypes } = require('sequelize');
-
 const Cliente = require('./cliente.model');
 const DailyList = require('./dailyList.model');
 

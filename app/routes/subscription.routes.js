@@ -14,6 +14,18 @@ module.exports = function (app) {
     subscription.findAll
   );
 
+  app.get(
+    "/api/subscriptions/daily-list/:dailyListId",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    subscription.findAllByDailyList
+  );
+
+  app.post(
+    "/api/subscriptions/bulk-create",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    subscription.bulkCreate
+  ); 
+
   app.post(
     "/api/subscriptions",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
