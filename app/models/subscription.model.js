@@ -105,14 +105,6 @@ module.exports = (sequelize, Sequelize) => {
 				key: 'id'
 			}
 		}
-		// clientListId: {
-		// 	type: Sequelize.INTEGER,
-		// 	allowNull: true,
-		// 	references: {
-		// 		model: require('./clientDailyList.model.js')(sequelize, Sequelize),
-		// 		key: 'id'
-		// 	}
-		// }
 	});
 
 	return Subscription;
