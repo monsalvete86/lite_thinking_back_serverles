@@ -1,5 +1,6 @@
 const db = require("../models");
 const Subscription = db.subscription;
+const Client = db.cliente;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Subscription
@@ -42,14 +43,10 @@ exports.bulkCreate = (req, res) => {
 
 // Retrieve all Subscriptions from the database.
 exports.findAll = (req, res) => {
-
-  console.log('imicio')
-  console.log(req.userId)
-  console.log('fin')
   // const subscriptionName = req.query.subscriptionName;
-  var condition = req.userId ? { operatorId: req.userId} : null;
+  var condition = req.userId ? { operatorId: req.userId } : null;
 
-  Subscription.findAll({ where: condition })
+  Subscription.findAll({ where: condition, include: Client })
     .then(data => {
       res.send(data);
     })
@@ -62,11 +59,11 @@ exports.findAll = (req, res) => {
 };
 
 exports.findAllByDailyList = (req, res) => {
- 
-  const dailyListId = req.params.dailyListId ?? null;
-  var condition = dailyListId ? { dailyListId:dailyListId } : null;
 
-  Subscription.findAll({ where: condition })
+  const dailyListId = req.params.dailyListId ?? null;
+  var condition = dailyListId ? { dailyListId: dailyListId } : null;
+
+  Subscription.findAll({ where: condition, include: Client })
     .then((data) => {
       res.send(data);
     })
