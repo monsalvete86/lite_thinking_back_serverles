@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Cliente
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.nombre || !req.body.apellido || !req.body.telefono || !req.body.direccion|| !req.body.ciudad ) {
+  if (!req.body.nombre || !req.body.apellido || !req.body.telefono || !req.body.direccion || !req.body.ciudad) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -36,8 +36,15 @@ exports.create = (req, res) => {
 
 // Retrieve all Clientes from the database.
 exports.findAll = (req, res) => {
-  const nombre = req.query.nombre;
-  var condition = nombre ? { nombre: { [Op.like]: `%${nombre}%` } } : null;
+  const client = req.query.client;
+ 
+  var condition = {
+    [Op.or]: [
+      { nombre: { [Op.like]: `%${client}%` } },
+      { apellido: { [Op.like]: `%${client}%` } },
+      { telefono: { [Op.like]: `%${client}%` } }
+    ]
+  }
 
   Cliente.findAll({ where: condition })
     .then(data => {
