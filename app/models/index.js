@@ -27,7 +27,7 @@ db.company = require("../models/company.model.js")(sequelize, Sequelize);
 db.dailyList = require("./dailyList.model.js")(sequelize, Sequelize);
 db.processor = require("./processor.model.js")(sequelize, Sequelize);
 db.subscription = require("./subscription.model.js")(sequelize, Sequelize);
-db.clientDailyList = require('./clientDailyList.model.js')(sequelize, Sequelize);
+// db.clientDailyList = require('./clientDailyList.model.js')(sequelize, Sequelize);
 db.pago = require("./pago.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
@@ -48,9 +48,13 @@ db.company.hasMany(db.product, {
 
 db.product.belongsTo(db.company);
 
-db.cliente.belongsToMany(db.dailyList, { through: db.clientDailyList });
-db.dailyList.belongsToMany(db.cliente, { through: db.clientDailyList });
+db.cliente.belongsToMany(db.user, { through: { model: db.subscription, unique: false }, foreignKey: 'clientId' });
+db.user.belongsToMany(db.cliente, { through: { model: db.subscription, unique: false }, foreignKey: 'operatorId' });
+db.subscription.belongsTo(db.dailyList)
+db.subscription.belongsTo(db.cliente, { foreignKey: 'clientId' })
+db.subscription.belongsTo(db.user, { foreignKey: 'operatorId' })
+db.user.hasMany(db.dailyList)
 
-db.ROLES = [ 'user', 'admin', 'moderator' ];
+db.ROLES = ['user', 'admin', 'moderator'];
 
 module.exports = db;
