@@ -36,13 +36,13 @@ exports.create = (req, res) => {
 
 // Retrieve all Clientes from the database.
 exports.findAll = (req, res) => {
-  const client = req.query.client;
+  const cliente = req.query.cliente;
  
   var condition = {
     [Op.or]: [
-      { nombre: { [Op.like]: `%${client}%` } },
-      { apellido: { [Op.like]: `%${client}%` } },
-      { telefono: { [Op.like]: `%${client}%` } }
+      { nombre: { [Op.like]: `%${cliente}%` } },
+      { apellido: { [Op.like]: `%${cliente}%` } },
+      { telefono: { [Op.like]: `%${cliente}%` } }
     ]
   }
 
