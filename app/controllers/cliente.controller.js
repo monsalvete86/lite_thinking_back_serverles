@@ -33,9 +33,25 @@ exports.create = (req, res) => {
       });
     });
 };
-
 // Retrieve all Clientes from the database.
 exports.findAll = (req, res) => {
+  const nombre = req.query.nombre;
+  var condition = nombre ? { nombre: { [Op.like]: `%${nombre}%` } } : null;
+
+  Cliente.findAll({ where: condition })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving clientes."
+      });
+    });
+};
+
+// Retrieve all Clientes from the database.
+exports.findAllQuery = (req, res) => {
   const cliente = req.query.cliente;
  
   var condition = {

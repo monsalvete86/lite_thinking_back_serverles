@@ -16,6 +16,12 @@ module.exports = function(app) {
     cliente.findAll
   );
 
+  app.get(
+    "/api/clientesQuery/:query",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    cliente.findAllQuery
+  );
+
   app.post(
     "/api/clientes",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
