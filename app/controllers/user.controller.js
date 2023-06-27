@@ -26,6 +26,22 @@ exports.findOne = (req, res) => {
     });
 };
 
+// Retrieve all Products from the database.
+exports.findAll = (req, res) => {
+
+  User.findAll()
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving users."
+      });
+    });
+};
+
+
 exports.update = (req, res) => {
   const id = req.params.id;
 

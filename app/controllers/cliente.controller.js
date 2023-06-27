@@ -36,8 +36,32 @@ exports.create = (req, res) => {
 
 // Retrieve all Clientes from the database.
 exports.findAll = (req, res) => {
+  const cliente = req.query.cliente;
+
+  var condition = cliente ? {
+    [Op.or]: [
+      { nombre: { [Op.like]: `%${cliente}%` } },
+      { apellido: { [Op.like]: `%${cliente}%` } },
+      { telefono: { [Op.like]: `%${cliente}%` } }
+    ]
+  } : null
+
+  Cliente.findAll({ where: condition })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving clientes."
+      });
+    });
+};
+
+// Retrieve all Clientes from the database.
+exports.findAllByQuery = (req, res) => {
   const client = req.query.client;
- 
+
   var condition = {
     [Op.or]: [
       { nombre: { [Op.like]: `%${client}%` } },
@@ -57,7 +81,6 @@ exports.findAll = (req, res) => {
       });
     });
 };
-
 // Find a single Cliente with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
@@ -128,4 +151,3 @@ exports.delete = (req, res) => {
       });
     });
 };
-
