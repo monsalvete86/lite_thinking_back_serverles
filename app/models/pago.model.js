@@ -7,15 +7,6 @@ module.exports = (sequelize, Sequelize) => {
       autoIncrement: true,
       type: Sequelize.INTEGER
     },
-    cliente: {
-      type: Sequelize.STRING
-    },
-    subscription: {
-      type: Sequelize.STRING
-    },
-    metodoPago: {
-      type: Sequelize.STRING
-    },
     importe: {
       type: Sequelize.STRING
     },
