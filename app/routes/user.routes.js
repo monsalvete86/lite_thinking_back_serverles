@@ -8,11 +8,14 @@ module.exports = function(app) {
     next();
   });
   
-  
-
-
   app.get("/api/test/all", controller.allAccess);
-  
+
+  // Get Clientes
+  app.get(
+    "/api/user",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    controller.findAll
+  ); 
   
   app.post(
     "/api/user/update_company",
