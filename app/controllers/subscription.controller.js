@@ -31,7 +31,10 @@ exports.create = (req, res) => {
 exports.bulkCreate = (req, res) => {
   const data = req.body;
 
-  Subscription.bulkCreate(data)
+  Subscription.bulkCreate(data, {
+    fields: ["id","operatorId", "clientId", "dailyListId"],
+    updateOnDuplicate: ["operatorId"]
+  })
     .then((data) => {
       res.send(data);
     })
@@ -47,7 +50,7 @@ exports.findAll = (req, res) => {
   // const subscriptionName = req.query.subscriptionName;
   var condition = req.userId ? { operatorId: req.userId } : null;
 
-  Subscription.findAll({ where: condition, include:  [Client, Operator] })
+  Subscription.findAll({ where: condition, include: [Client, Operator] })
     .then(data => {
       res.send(data);
     })

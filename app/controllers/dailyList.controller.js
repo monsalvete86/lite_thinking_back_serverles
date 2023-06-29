@@ -1,27 +1,28 @@
 const db = require("../models");
 const DailyList = db.dailyList;
+const Subscription = db.subscription;
 const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
-  const data = {
-    userId: req.body.userId,
+  const dataSubscription = {
+    userId: req.userId,
     status: true,
     date: req.body.date
   };
 
   DailyList.findOne({
     where: {
-      date: data.date,
+      date: dataSubscription.date,
       status: true
     }
   })
     .then((data) => {
       if (data) {
         res.status(400).send({
-          message: "Se ha creado una lista prviamente con la misma fecha y se encuentra activa.",
+          message: "Se ha creado una lista previamente con la misma fecha y se encuentra activa.",
         });
       } else {
-        DailyList.create(data)
+        DailyList.create(dataSubscription)
           .then((data) => {
             res.send(data);
           })
@@ -108,23 +109,35 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  DailyList.destroy({
-    where: { id: id },
+  DailyList.findByPk(id, {
+    include: {
+      model: Subscription
+    }
   })
-    .then((num) => {
-      if (num == 1) {
-        res.send({
-          message: "DailyList was deleted successfully!",
-        });
+    .then((dailyList) => {
+      if (!dailyList) {
+        res.send('No se encontró la Lista');
+        return;
+      }
+
+      let subscriptions = dailyList.subscriptions.filter(value => 
+        value.state !== "GENERATED"  && value.state !== null
+      )
+      
+      if (subscriptions.length > 0) {
+        res.send(subscriptions)
+        console.log('No se puede eliminar la Lista');
       } else {
-        res.send({
-          message: `Cannot delete DailyList with id=${id}. Maybe Product was not found!`,
-        });
+        dailyList.destroy()
+          .then(() => {
+            res.send('Lista eliminada');
+          })
+          .catch((error) => {
+            res.send('Error al eliminar la Lista:', error);
+          });
       }
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: "Could not delete DailyList with id=" + id,
-      });
+    .catch((error) => {
+      res.send('Error al buscar la Lista:', error);
     });
 };

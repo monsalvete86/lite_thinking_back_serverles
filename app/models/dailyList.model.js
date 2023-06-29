@@ -12,11 +12,19 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.BOOLEAN,
       default: true,
     },
-    date:{
+    date: {
       type: Sequelize.STRING,
-      default:null
+      default: null
+    },
+    deletedAt: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      defaultValue: null
     }
-  });
+  },
+    {
+      paranoid: true
+    });
 
   return DailyList;
 };

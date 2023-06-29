@@ -86,6 +86,7 @@ module.exports = (sequelize, Sequelize) => {
 			},
 			state: {
 				type: Sequelize.STRING,
+				default: "GENERATED",
 				allowNull: true
 			},
 
