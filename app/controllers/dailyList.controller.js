@@ -9,22 +9,44 @@ exports.create = (req, res) => {
     date: req.body.date
   };
 
-  DailyList.create(data)
+  DailyList.findOne({
+    where: {
+      date: data.date,
+      status: true
+    }
+  })
     .then((data) => {
-      res.send(data);
+      if (data) {
+        res.status(400).send({
+          message: "Se ha creado una lista prviamente con la misma fecha y se encuentra activa.",
+        });
+      } else {
+        DailyList.create(data)
+          .then((data) => {
+            res.send(data);
+          })
+          .catch((err) => {
+            res.status(500).send({
+              message: err.message || "Some error occurred while creating the List.",
+            });
+          });
+      }
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while creating the List.",
-      });
-    });
 };
 
 // Retrieve all DailyList from the database.
 exports.findAll = (req, res) => {
-  console.log('entrando a dailulist');
-  const createdAt = req.query.createdAt ?? null;
-  var condition = createdAt ? { createdAt: { [Op.gte]: createdAt } } : null;
+  const from = req.query.from ?? new Date();
+  const to = req.query.to ?? new Date();
+
+  var condition = req.query ? {
+    date: {
+      [Op.and]: [
+        from && { [Op.gte]: from }, // Si from no es nula, agregar condición gte (mayor o igual)
+        to && { [Op.lte]: to } // Si to no es nula, agregar condición lte (menor o igual)
+      ].filter(Boolean) // Filtrar elementos nulos/undefined
+    }
+  } : null;
 
   DailyList.findAll({ where: condition })
     .then((data) => {
