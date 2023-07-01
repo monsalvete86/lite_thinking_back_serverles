@@ -1,6 +1,7 @@
 const db = require("../models");
 const DailyList = db.dailyList;
 const Subscription = db.subscription;
+const User = db.user;
 const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
@@ -49,7 +50,7 @@ exports.findAll = (req, res) => {
     }
   } : null;
 
-  DailyList.findAll({ where: condition })
+  DailyList.findAll({ where: condition ,  include: [User]})
     .then((data) => {
       res.send(data);
     })

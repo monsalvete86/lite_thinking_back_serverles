@@ -29,7 +29,7 @@ module.exports = function (app) {
   );
 
   // Get Clientes
-  app.get(
+  app.post(
     "/api/clientes-by",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     cliente.findAllByQuery

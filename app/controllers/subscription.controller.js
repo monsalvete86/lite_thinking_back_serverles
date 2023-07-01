@@ -4,6 +4,10 @@ const Client = db.cliente;
 const Operator = db.user;
 const Op = db.Sequelize.Op;
 
+const today = () => {
+  return new Date().toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2')
+}
+
 // Create and Save a new Subscription
 exports.create = (req, res) => {
 
@@ -32,7 +36,7 @@ exports.bulkCreate = (req, res) => {
   const data = req.body;
 
   Subscription.bulkCreate(data, {
-    fields: ["id","operatorId", "clientId", "dailyListId"],
+    fields: ["id", "operatorId", "clientId", "dailyListId"],
     updateOnDuplicate: ["operatorId"]
   })
     .then((data) => {
@@ -47,10 +51,16 @@ exports.bulkCreate = (req, res) => {
 
 // Retrieve all Subscriptions from the database.
 exports.findAll = (req, res) => {
-  // const subscriptionName = req.query.subscriptionName;
   var condition = req.userId ? { operatorId: req.userId } : null;
 
-  Subscription.findAll({ where: condition, include: [Client, Operator] })
+  Subscription.findAll({
+    where: condition, include: [Client, Operator, {
+      model: db.dailyList,
+      where: {
+        date: today()
+      }
+    }]
+  })
     .then(data => {
       res.send(data);
     })
