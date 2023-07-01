@@ -67,10 +67,13 @@ exports.findAllByQuery = (req, res) => {
       { nombre: { [Op.like]: `%${client}%` } },
       { apellido: { [Op.like]: `%${client}%` } },
       { telefono: { [Op.like]: `%${client}%` } }
-    ]
+    ],
+    id: {
+      [Op.notIn]: req.body.list
+    }
   }
 
-  Cliente.findAll({ where: condition })
+  Cliente.findAll({ where: condition, limit: 5 })
     .then(data => {
       res.send(data);
     })
