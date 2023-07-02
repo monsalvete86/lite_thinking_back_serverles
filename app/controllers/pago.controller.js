@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Pago
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.importe || !req.body.status || !req.body.fechaPago) {
+  if (!req.body.importe || !req.body.state || !req.body.fechaPago) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -15,7 +15,7 @@ exports.create = (req, res) => {
   // Create a Pago
   const pago = {
     importe: req.body.importe,
-    status: req.body.status,
+    state: req.body.state,
     fechaPago: req.body.fechaPago,
   };
 
