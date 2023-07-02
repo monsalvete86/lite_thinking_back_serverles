@@ -73,7 +73,11 @@ exports.findAllByQuery = (req, res) => {
     }
   }
 
-  Cliente.findAll({ where: condition, limit: 5 })
+  Cliente.findAll({
+    where: condition, limit: 5, order: [
+      ['id', 'DESC']
+    ]
+  })
     .then(data => {
       res.send(data);
     })
