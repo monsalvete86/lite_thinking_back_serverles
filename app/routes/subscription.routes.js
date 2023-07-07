@@ -20,6 +20,12 @@ module.exports = function (app) {
     subscription.findAllByDailyList
   );
 
+  app.get(
+    "/api/subscriptions/pagos",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    subscription.findAllWithPayments
+  );
+
   app.post(
     "/api/subscriptions/bulk-create",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],

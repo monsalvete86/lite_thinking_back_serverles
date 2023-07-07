@@ -1,7 +1,3 @@
-const clientDailyListModel = require('./clientDailyList.model');
-const dailyListModel = require('./dailyList.model');
-const Company = require('./company.model');
-
 module.exports = (sequelize, Sequelize) => {
 	const Cliente = sequelize.define('clientes', {
 		id: {
