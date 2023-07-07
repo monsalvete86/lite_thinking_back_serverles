@@ -2,6 +2,7 @@ const db = require("../models");
 const Subscription = db.subscription;
 const Client = db.cliente;
 const Operator = db.user;
+const Pago = db.pago;
 const Op = db.Sequelize.Op;
 
 const today = () => {
@@ -58,8 +59,6 @@ exports.bulkCreate = (req, res) => {
 exports.findAll = (req, res) => {
   var conditions = {}
 
-  console.log('req.params', req.query)
-
   if (req.userId) { conditions.operatorId = req.userId }
   if (req.query.state) { conditions.state = req.query.state ? req.query.state : 'ACCEPTED' }
 
@@ -103,6 +102,40 @@ exports.findAllByDailyList = (req, res) => {
     });
 };
 
+exports.findAllWithPayments = (req, res) => {
+  var conditions = {}
+
+  if (req.userId) { conditions.operatorId = req.userId }
+
+  Subscription.findAll({
+    where: conditions,
+    include: [
+      Client,
+      Operator,
+      {
+        model: db.dailyList,
+        where: {
+          date: today()
+        }
+      },
+      {
+        model: db.pago,
+        where: {
+          state: req.query.state ? req.query.state : 'PAGADO'
+        }
+      }
+    ]
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving subscriptions."
+      });
+    });
+};
 
 // Find a single Subscription with an id
 exports.findOne = (req, res) => {
