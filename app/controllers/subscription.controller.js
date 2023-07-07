@@ -8,6 +8,11 @@ const today = () => {
   return new Date().toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2')
 }
 
+const dateLate = () => {
+  let today = new Date();
+  today.setDate(today.getDate() + 3)
+  return today.toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2');
+}
 // Create and Save a new Subscription
 exports.create = (req, res) => {
 
@@ -51,15 +56,25 @@ exports.bulkCreate = (req, res) => {
 
 // Retrieve all Subscriptions from the database.
 exports.findAll = (req, res) => {
-  var condition = req.userId ? { operatorId: req.userId } : null;
+  var conditions = {}
+
+  console.log('req.params', req.query)
+
+  if (req.userId) { conditions.operatorId = req.userId }
+  if (req.query.state) { conditions.state = req.query.state ? req.query.state : 'ACCEPTED' }
 
   Subscription.findAll({
-    where: condition, include: [Client, Operator, {
-      model: db.dailyList,
-      where: {
-        date: today()
+    where: conditions,
+    include: [
+      Client,
+      Operator,
+      {
+        model: db.dailyList,
+        where: {
+          date: today()
+        }
       }
-    }]
+    ]
   })
     .then(data => {
       res.send(data);
