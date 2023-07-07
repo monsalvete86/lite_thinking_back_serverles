@@ -10,7 +10,7 @@ module.exports = (sequelize, Sequelize) => {
     importe: {
       type: Sequelize.STRING
     },
-    status: {
+    state: {
       type: Sequelize.STRING
     },
     fechaPago: {
