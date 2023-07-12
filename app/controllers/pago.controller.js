@@ -1,26 +1,47 @@
 const db = require("../models");
 const Pago = db.pago;
+const Client = db.cliente;
+const Subscription = db.subscription;
 const Op = db.Sequelize.Op;
+
+exports.create = (req, res) => {
+
+  // Create a Pago
+  // const pago = req.body;
+  const data = {
+    clientId: req.body.clientId,
+    subscriptionId: req.body.subscriptionId,
+    metodoPago: req.body.metodoPago,
+    importe: req.body.importe,
+    fechaPago: req.body.fechaPago 
+  };
+
+  // Save Pago in the database.
+  Pago.create(data)
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while creating the Pago."
+      });
+    });
+};
 
 // Create and Save a new Pago
 exports.create = (req, res) => {
-  // Validate request
-  if (!req.body.importe || !req.body.state || !req.body.fechaPago) {
-    res.status(400).send({
-      message: "Content can not be empty!"
-    });
-    return;
-  }
-
-  // Create a Pago
-  const pago = {
+  const data = {
+    clientId: req.body.clientId,
+    subscriptionId: req.body.subscriptionId,
+    metodoPago: req.body.metodoPago,
     importe: req.body.importe,
     state: req.body.state,
-    fechaPago: req.body.fechaPago,
+    fechaPago: req.body.fechaPago
   };
 
-  // Save Pago in the database
-  Pago.create(pago)
+  // Save Pago in the database.
+  Pago.create(data)
     .then(data => {
       res.send(data);
     })
@@ -45,6 +66,36 @@ exports.findAll = (req, res) => {
       res.status(500).send({
         message:
           err.message || "Some error occurred while retrieving pagos."
+      });
+    });
+};
+
+exports.findAll = (req, res) => {
+  var conditions = {}
+
+  if (req.userId) { conditions.operatorId = req.userId }
+  if (req.query.state) { conditions.state = req.query.state ? req.query.state : 'ACCEPTED' }
+
+  Subscription.findAll({
+    where: conditions,
+    include: [
+      Client,
+      Operator,
+      {
+        model: db.dailyList,
+        where: {
+          date: today()
+        }
+      }
+    ]
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving subscriptions."
       });
     });
 };
