@@ -14,7 +14,7 @@ const dateLate = () => {
   today.setDate(today.getDate() + 3)
   return today.toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2');
 }
-// Create and Save a new Subscription
+// Create and Save a new Subscription.
 exports.create = (req, res) => {
 
   // Create a Subscription
@@ -25,7 +25,7 @@ exports.create = (req, res) => {
     dailyListId: req.body.dailyListId
   };
 
-  // Save Subscription in the database
+  // Save Subscription in the database.
   Subscription.create(data)
     .then(data => {
       res.send(data);
@@ -38,6 +38,7 @@ exports.create = (req, res) => {
     });
 };
 
+// Optimizes performance by reducing state updates and renders Subscription.
 exports.bulkCreate = (req, res) => {
   const data = req.body;
 
@@ -86,6 +87,7 @@ exports.findAll = (req, res) => {
     });
 };
 
+// Unit or integration tests for interacting with and asserting component elements.
 exports.findAllByDailyList = (req, res) => {
 
   const dailyListId = req.params.dailyListId ?? null;
@@ -137,7 +139,7 @@ exports.findAllWithPayments = (req, res) => {
     });
 };
 
-// Find a single Subscription with an id
+// Find a single Subscription with an id.
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
@@ -158,7 +160,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Update a Subscription by the id in the request
+// Update a Subscription by the id in the request.
 exports.update = (req, res) => {
   const id = req.params.id;
 
@@ -183,7 +185,7 @@ exports.update = (req, res) => {
     });
 };
 
-// Delete a Subscription with the specified id in the request
+// Delete a Subscription with the specified id in the request.
 exports.delete = (req, res) => {
   const id = req.params.id;
 
