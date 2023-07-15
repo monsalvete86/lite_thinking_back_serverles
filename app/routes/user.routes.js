@@ -1,13 +1,13 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/user.controller");
 
-module.exports = function(app) {
-  app.use(function(req, res, next) {
+module.exports = function (app) {
+  app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Content-Type', 'application/json')
     next();
   });
-  
+
   app.get("/api/test/all", controller.allAccess);
 
   // Get Clientes
@@ -15,18 +15,30 @@ module.exports = function(app) {
     "/api/user",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     controller.findAll
-  ); 
-  
-  app.post(
-    "/api/user/update_company",
-    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    controller.updateCompany
   );
-  
+
+  app.post(
+    "/api/user",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    controller.create
+  );
+
   app.post(
     "/api/user/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     controller.findOne
+  );
+
+  app.put(
+    "/api/user/:id",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    controller.update
+  );
+
+  app.post(
+    "/api/user/update_company",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    controller.updateCompany
   );
 
   app.get(

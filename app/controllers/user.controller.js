@@ -2,8 +2,52 @@ const db = require("../models");
 const User = db.user;
 const Op = db.Sequelize.Op;
 
+var jwt = require("jsonwebtoken");
+var bcrypt = require("bcryptjs");
+
+
 exports.allAccess = (req, res) => {
   return "Public Content.";
+};
+
+exports.create = (req, res) => {
+  // Save User to Database
+  const body = req.body;
+  const data = {
+    username: body.username,
+    email: body.email,
+    name: body.name,
+    companyId: 1,
+    last_name: body.last_name,
+  }
+
+  if (body.password) {
+    data.password = body.password
+  }
+  User.create(data)
+    .then(user => {
+      if (body.roles) {
+        Role.findAll({
+          where: {
+            name: {
+              [Op.or]: body.roles
+            }
+          }
+        }).then(roles => {
+          user.setRoles(roles).then(() => {
+            res.send({ message: "User registered successfully!" });
+          });
+        });
+      } else {
+        // user role = 1
+        user.setRoles([1]).then(() => {
+          res.send({ message: "User registered successfully!" });
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message });
+    });
 };
 
 exports.findOne = (req, res) => {
@@ -12,6 +56,7 @@ exports.findOne = (req, res) => {
   User.findByPk(id)
     .then(data => {
       if (data) {
+
         res.send(data);
       } else {
         res.status(404).send({
@@ -42,37 +87,47 @@ exports.findAll = (req, res) => {
 };
 
 
-exports.update = (req, res) => {
+exports.update = async (req, res) => {
   const id = req.params.id;
+  const { username, password, email, name, last_name } = req.body;
 
-  User.update(req.body, {
-    where: { id: id }
-  })
-    .then(num => {
-      if (num == 1) {
-        res.send({
-          message: "user was updated successfully."
-        });
-      } else {
-        res.send({
-          message: `Cannot update user with id=${id}. Maybe user was not found or req.body is empty!`
-        });
+  try {
+    const user = await User.findByPk(id);
+    if (user) {
+      user.username = username;
+      user.name = name;
+      user.last_name = last_name;
+      user.email = email;
+      user.companyId = 1;
+
+      if (password) {
+
+        var passwordIsEqual = bcrypt.compareSync(
+          bcrypt.hashSync(password, 8),
+          user.password
+        )
+
+        if (!passwordIsEqual) {
+          user.password = password
+        }
       }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error updating user with id=" + id
-      });
-    });
+      await user.save();
+      res.json(user);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.updateCompany = (req, res) => {
-  
-  const {idCompany, idUser } = req.body;
+
+  const { idCompany, idUser } = req.body;
 
   User.update(
-    { companyId: '' + idCompany},
-    { where: { id: '' + idUser} }
+    { companyId: '' + idCompany },
+    { where: { id: '' + idUser } }
   )
     .then(result => {
       console.log(result);
