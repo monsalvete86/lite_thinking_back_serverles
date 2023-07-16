@@ -4,31 +4,6 @@ const Client = db.cliente;
 const Subscription = db.subscription;
 const Op = db.Sequelize.Op;
 
-exports.create = (req, res) => {
-
-  // Create a Pago
-  // const pago = req.body;
-  const data = {
-    clientId: req.body.clientId,
-    subscriptionId: req.body.subscriptionId,
-    metodoPago: req.body.metodoPago,
-    importe: req.body.importe,
-    fechaPago: req.body.fechaPago 
-  };
-
-  // Save Pago in the database.
-  Pago.create(data)
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the Pago."
-      });
-    });
-};
-
 // Create and Save a new Pago
 exports.create = (req, res) => {
   const data = {
@@ -58,33 +33,14 @@ exports.findAll = (req, res) => {
   const importe = req.query.importe;
   var condition = importe ? { importe: { [Op.like]: `%${importe}%` } } : null;
 
-  Pago.findAll({ where: condition })
-    .then(data => {
-      res.send(data);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving pagos."
-      });
-    });
-};
-
-exports.findAll = (req, res) => {
-  var conditions = {}
-
-  if (req.userId) { conditions.operatorId = req.userId }
-  if (req.query.state) { conditions.state = req.query.state ? req.query.state : 'ACCEPTED' }
-
-  Subscription.findAll({
-    where: conditions,
+  Pago.findAll({
+    where: condition,
     include: [
       Client,
-      Operator,
+      Subscription,
       {
-        model: db.dailyList,
+        model: db.pago,
         where: {
-          date: today()
         }
       }
     ]
@@ -95,7 +51,7 @@ exports.findAll = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving subscriptions."
+          err.message || "Some error occurred while retrieving pagos."
       });
     });
 };

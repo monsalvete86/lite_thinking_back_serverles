@@ -53,7 +53,8 @@ db.user.belongsToMany(db.cliente, { through: { model: db.subscription, unique: f
 db.subscription.belongsTo(db.dailyList)
 db.subscription.belongsTo(db.cliente, { foreignKey: 'clientId' })
 db.subscription.belongsTo(db.user, { foreignKey: 'operatorId' })
-db.subscription.hasMany(db.pago, { foreignKey: 'subscription' })
+db.subscription.hasMany(db.pago, { foreignKey: 'subscriptionId' })
+db.cliente.hasMany(db.pago, { foreignKey: 'clientId' })
 
 db.user.hasMany(db.dailyList)
 db.dailyList.hasMany(db.subscription)

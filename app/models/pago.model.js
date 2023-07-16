@@ -7,7 +7,7 @@ module.exports = (sequelize, Sequelize) => {
       autoIncrement: true,
       type: Sequelize.INTEGER
     },
-    cliente: {
+    clientId: {
       type: Sequelize.INTEGER,
       allowNull: true,
       references: {
@@ -15,7 +15,7 @@ module.exports = (sequelize, Sequelize) => {
         key: 'id'
       }
     },
-    subscription: {
+    subscriptionId: {
       type: Sequelize.INTEGER,
       allowNull: true,
       references: {
