@@ -31,18 +31,12 @@ exports.create = (req, res) => {
 // Retrieve all Pagos from the database.
 exports.findAll = (req, res) => {
   const importe = req.query.importe;
-  var condition = importe ? { importe: { [Op.like]: `%${importe}%` } } : null;
+  var conditions = importe ? { importe: { [Op.like]: `%${importe}%` } } : null;
 
   Pago.findAll({
-    where: condition,
+    where: conditions,
     include: [
-      Client,
-      Subscription,
-      {
-        model: db.pago,
-        where: {
-        }
-      }
+      
     ]
   })
     .then(data => {
