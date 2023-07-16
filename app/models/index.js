@@ -50,6 +50,7 @@ db.product.belongsTo(db.company);
 
 db.cliente.belongsToMany(db.user, { through: { model: db.subscription, unique: false }, foreignKey: 'clientId' });
 db.user.belongsToMany(db.cliente, { through: { model: db.subscription, unique: false }, foreignKey: 'operatorId' });
+
 db.subscription.belongsTo(db.dailyList)
 db.subscription.belongsTo(db.cliente, { foreignKey: 'clientId' })
 db.subscription.belongsTo(db.user, { foreignKey: 'operatorId' })
