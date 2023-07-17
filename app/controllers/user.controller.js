@@ -89,7 +89,7 @@ exports.findAll = (req, res) => {
 
 exports.update = async (req, res) => {
   const id = req.params.id;
-  const { username, password, email, name, last_name } = req.body;
+  const { username, password, email, name, last_name, roles } = req.body;
 
   try {
     const user = await User.findByPk(id);
@@ -111,6 +111,7 @@ exports.update = async (req, res) => {
           user.password = password
         }
       }
+      await user.setRoles(roles);
       await user.save();
       res.json(user);
     } else {
