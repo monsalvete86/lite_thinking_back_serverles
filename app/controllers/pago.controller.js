@@ -36,7 +36,8 @@ exports.findAll = (req, res) => {
   Pago.findAll({
     where: conditions,
     include: [
-      
+     // Client,
+     // Subscription,
     ]
   })
     .then(data => {
