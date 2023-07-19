@@ -27,7 +27,6 @@ db.company = require("../models/company.model.js")(sequelize, Sequelize);
 db.dailyList = require("./dailyList.model.js")(sequelize, Sequelize);
 db.processor = require("./processor.model.js")(sequelize, Sequelize);
 db.subscription = require("./subscription.model.js")(sequelize, Sequelize);
-// db.clientDailyList = require('./clientDailyList.model.js')(sequelize, Sequelize);
 db.pago = require("./pago.model.js")(sequelize, Sequelize);
 
 db.role.belongsToMany(db.user, {
