@@ -8,6 +8,10 @@ module.exports = (sequelize, Sequelize) => {
 				autoIncrement: true,
 				type: Sequelize.INTEGER
 			},
+			monthlyPayment: {
+				type: Sequelize.FLOAT,
+				allowNull: true
+			},
 			migratoryProcess: {
 				type: Sequelize.STRING,
 				allowNull: true
