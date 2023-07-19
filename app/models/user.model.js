@@ -1,6 +1,7 @@
-module.exports = (sequelize, Sequelize) => {  
+module.exports = (sequelize, Sequelize) => {
   const Company = require("./company.model");
 
+  var bcrypt = require("bcryptjs");
 
   const User = sequelize.define("users", {
     id: {
@@ -10,6 +11,14 @@ module.exports = (sequelize, Sequelize) => {
     },
     username: {
       type: Sequelize.STRING
+    },
+    name: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    last_name: {
+      type: Sequelize.STRING,
+      allowNull: true
     },
     email: {
       type: Sequelize.STRING,
@@ -28,7 +37,31 @@ module.exports = (sequelize, Sequelize) => {
         key: 'id'
       }
     }
-  });
+  },
+    {
+      hooks: {
+        beforeCreate: async (user) => {
+          if (user.password) {
+            // const salt = await bcrypt.genSaltSync(8, 'a');
+            user.password = bcrypt.hashSync(user.password, 8);
+          }
+        },
+        beforeUpdate: async (user) => {
+          if (user.password) {
+            user.password = bcrypt.hashSync(user.password, 8);
+          }
+        }
+      },
+      instanceMethods: {
+        validPassword: (password) => {
+          return bcrypt.compareSync(password, this.password);
+        }
+      }
+    });
+
+  User.prototype.validPassword = async (password, hash) => {
+    return await bcrypt.compareSync(password, hash);
+  }
 
   User.associate = (models) => {
     User.hasMany(models.subscriptions, { foreignKey: 'operatorId' })

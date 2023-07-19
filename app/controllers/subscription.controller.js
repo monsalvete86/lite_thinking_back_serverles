@@ -2,13 +2,19 @@ const db = require("../models");
 const Subscription = db.subscription;
 const Client = db.cliente;
 const Operator = db.user;
+const Pago = db.pago;
 const Op = db.Sequelize.Op;
 
 const today = () => {
   return new Date().toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2')
 }
 
-// Create and Save a new Subscription
+const dateLate = () => {
+  let today = new Date();
+  today.setDate(today.getDate() + 3)
+  return today.toLocaleString('en-us', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2');
+}
+// Create and Save a new Subscription.
 exports.create = (req, res) => {
 
   // Create a Subscription
@@ -19,7 +25,7 @@ exports.create = (req, res) => {
     dailyListId: req.body.dailyListId
   };
 
-  // Save Subscription in the database
+  // Save Subscription in the database.
   Subscription.create(data)
     .then(data => {
       res.send(data);
@@ -32,6 +38,7 @@ exports.create = (req, res) => {
     });
 };
 
+// Optimizes performance by reducing state updates and renders Subscription.
 exports.bulkCreate = (req, res) => {
   const data = req.body;
 
@@ -51,15 +58,23 @@ exports.bulkCreate = (req, res) => {
 
 // Retrieve all Subscriptions from the database.
 exports.findAll = (req, res) => {
-  var condition = req.userId ? { operatorId: req.userId } : null;
+  var conditions = {}
+
+  if (req.userId) { conditions.operatorId = req.userId }
+  if (req.query.state) { conditions.state = req.query.state ? req.query.state : 'ACCEPTED' }
 
   Subscription.findAll({
-    where: condition, include: [Client, Operator, {
-      model: db.dailyList,
-      where: {
-        date: today()
+    where: conditions,
+    include: [
+      Client,
+      Operator,
+      {
+        model: db.dailyList,
+        where: {
+          date: today()
+        }
       }
-    }]
+    ]
   })
     .then(data => {
       res.send(data);
@@ -72,6 +87,7 @@ exports.findAll = (req, res) => {
     });
 };
 
+// Unit or integration tests for interacting with and asserting component elements.
 exports.findAllByDailyList = (req, res) => {
 
   const dailyListId = req.params.dailyListId ?? null;
@@ -88,8 +104,42 @@ exports.findAllByDailyList = (req, res) => {
     });
 };
 
+exports.findAllWithPayments = (req, res) => {
+  var conditions = {}
 
-// Find a single Subscription with an id
+  if (req.userId) { conditions.operatorId = req.userId }
+
+  Subscription.findAll({
+    where: conditions,
+    include: [
+      Client,
+      Operator,
+      {
+        model: db.dailyList,
+        where: {
+          date: today()
+        }
+      },
+      {
+        model: db.pago,
+        where: {
+          state: req.query.state ? req.query.state : 'PAGADO'
+        }
+      }
+    ]
+  })
+    .then(data => {
+      res.send(data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving subscriptions."
+      });
+    });
+};
+
+// Find a single Subscription with an id.
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
@@ -110,7 +160,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Update a Subscription by the id in the request
+// Update a Subscription by the id in the request.
 exports.update = (req, res) => {
   const id = req.params.id;
 
@@ -135,7 +185,7 @@ exports.update = (req, res) => {
     });
 };
 
-// Delete a Subscription with the specified id in the request
+// Delete a Subscription with the specified id in the request.
 exports.delete = (req, res) => {
   const id = req.params.id;
 

@@ -8,10 +8,20 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER
     },
     cliente: {
-      type: Sequelize.STRING
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      references: {
+        model: require('./cliente.model.js')(sequelize, Sequelize),
+        key: 'id'
+      }
     },
     subscription: {
-      type: Sequelize.STRING
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      references: {
+        model: require('./subscription.model.js')(sequelize, Sequelize),
+        key: 'id'
+      }
     },
     metodoPago: {
       type: Sequelize.STRING
@@ -19,7 +29,7 @@ module.exports = (sequelize, Sequelize) => {
     importe: {
       type: Sequelize.STRING
     },
-    status: {
+    state: {
       type: Sequelize.STRING
     },
     fechaPago: {
