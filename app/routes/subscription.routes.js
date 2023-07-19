@@ -21,7 +21,7 @@ module.exports = function (app) {
   );
 
   app.get(
-    "/api/subscriptions/pagos",
+    "/api/subscriptions-pagos",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     subscription.findAllWithPayments
   );
