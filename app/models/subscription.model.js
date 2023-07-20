@@ -144,9 +144,9 @@ module.exports = (sequelize, Sequelize) => {
 				get() {
 					return calcularMesesDesdeFecha(this.createdAt);
 				},
-				set(value) {
-					throw new Error('No puedes establecer el atributo "quotes".');
-				},
+				// set(value) {
+				// 	throw new Error('No puedes establecer el atributo "quotes".');
+				// },
 			},
 			nextPaymentDate: {
 				type: Sequelize.VIRTUAL,
@@ -154,9 +154,9 @@ module.exports = (sequelize, Sequelize) => {
 					fechadePago = sumarMesesAFecha(this.createdAt, calcularMesesDesdeFecha(this.createdAt))
 					return fechadePago;
 				},
-				set(value) {
-					throw new Error('No puedes establecer el atributo "quotes".');
-				},
+				// set(value) {
+				// 	throw new Error('No puedes establecer el atributo "quotes".');
+				// },
 			},
 		});
 
