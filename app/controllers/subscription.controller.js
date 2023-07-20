@@ -179,8 +179,10 @@ exports.update = (req, res) => {
       }
     })
     .catch(err => {
+      console.log(err)
       res.status(500).send({
-        message: "Error updating Subscription with id=" + id
+        message: "Error updating Subscription with id=" + id,
+        error: err
       });
     });
 };
