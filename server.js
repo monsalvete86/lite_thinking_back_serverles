@@ -19,7 +19,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-// parse requests of content-type - application/json
+// parse requests of content-type - application/json 
 app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./app/models");
 const Role = db.role;
 
-// db.sequelize.sync();
+// db.sequelize.sync(); 
 // force: true will drop the table if it already exists
 // db.sequelize.sync({force: true}).then(() => {
 //   console.log('Drop and Resync Database with { force: true }');
@@ -53,7 +53,7 @@ require("./app/routes/processor.routes")(app);
 require("./app/routes/subscription.routes")(app);
 require("./app/routes/pago.routes")(app);
 
-// set port, listen for requests
+// set port, listen for requests  
 const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
