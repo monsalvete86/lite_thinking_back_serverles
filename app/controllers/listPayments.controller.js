@@ -12,7 +12,7 @@ exports.create = (req, res) => {
     metodoPago: req.body.metodoPago,
     operatorId: req.body.operatorId,
     importe: req.body.importe,
-    monthlyPaymentId: req.body.monthlyPaymentId,
+    monthlyPayment: req.body.monthlyPayment,
     statePago: req.body.statePago,
     fechaPago: req.body.fechaPago
   };
