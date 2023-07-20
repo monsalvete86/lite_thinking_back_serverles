@@ -1,6 +1,12 @@
 const pago = require("../controllers/pago.controller.js");
 const { authJwt } = require("../middleware/index.js");
+const express = require("express");
+const router = express.Router();
+const pagosController = require("../controllers/pagos.controller");
 
+module.exports = router;
+
+router.put("/cancel/:id", pagosController.cancelPayment);
 module.exports = function (app) {
   app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers");

@@ -1,7 +1,5 @@
 const db = require("../models");
 const ListPayments = db.pago;
-const Client = db.cliente;
-const Subscription = db.subscription;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new ListPayments
@@ -119,6 +117,30 @@ exports.delete = (req, res) => {
     .catch(err => {
       res.status(500).send({
         message: "Could not delete ListPayments with id=" + id
+      });
+    });
+};
+
+// Función para cancelar un pago por su ID
+exports.cancelPayment = (req, res) => {
+  const id = req.params.id;
+
+  // Aquí, implementamos la lógica para inactivar el estado del pago
+  ListPayments.update({ statePago: false }, { where: { id: id } })
+    .then((num) => {
+      if (num == 1) {
+        res.send({
+          message: "Payment was canceled successfully.",
+        });
+      } else {
+        res.status(404).send({
+          message: `Cannot cancel Payment with id=${id}. Maybe Payment was not found!`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error canceling Payment with id=" + id,
       });
     });
 };
