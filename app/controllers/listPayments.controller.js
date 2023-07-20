@@ -1,10 +1,10 @@
 const db = require("../models");
-const Pago = db.pago;
+const ListPayments = db.pago;
 const Client = db.cliente;
 const Subscription = db.subscription;
 const Op = db.Sequelize.Op;
 
-// Create and Save a new Pago
+// Create and Save a new ListPayments
 exports.create = (req, res) => {
   const data = {
     clientId: req.body.clientId,
@@ -15,29 +15,29 @@ exports.create = (req, res) => {
     fechaPago: req.body.fechaPago
   };
 
-  // Save Pago in the database.
-  Pago.create(data)
+  // Save ListPayments in the database.
+  ListPayments.create(data)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the Pago."
+          err.message || "Some error occurred while creating the ListPayments."
       });
     });
 };
 
-// Retrieve all Pagos from the database.
+// Retrieve all ListPaymentss from the database.
 exports.findAll = (req, res) => {
-  var conditions = {}
-  conditions.state = req.query.state ? req.query.state : 'PAGADO' 
+  const importe = req.query.importe;
+  var conditions = importe ? { importe: { [Op.like]: `%${importe}%` } } : null;
 
-  Pago.findAll({
+  ListPayments.findAll({
     where: conditions,
     include: [
-      Client,
-      Subscription
+     // Client,
+     // Subscription,
     ]
   })
     .then(data => {
@@ -51,94 +51,74 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single Pago with an id
+// Find a single ListPayments with an id
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Pago.findByPk(id)
+  ListPayments.findByPk(id)
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Pago with id=${id}.`
+          message: `Cannot find ListPayments with id=${id}.`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Pago with id=" + id
+        message: "Error retrieving ListPayments with id=" + id
       });
     });
 };
 
-// Update a Pago by the id in the request
+// Update a ListPayments by the id in the request
 exports.update = (req, res) => {
   const id = req.params.id;
 
-  Pago.update(req.body, {
+  ListPayments.update(req.body, {
     where: { id: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Pago was updated successfully."
+          message: "ListPayments was updated successfully."
         });
       } else {
         res.send({
-          message: `Cannot update Pago with id=${id}. Maybe Pago was not found or req.body is empty!`
+          message: `Cannot update ListPayments with id=${id}. Maybe ListPayments was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating Pago with id=" + id
+        message: "Error updating ListPayments with id=" + id
       });
     });
 };
 
-exports.pagoSubscription = (req, res) => {
-  let subscriptionId = req.params.subscriptionId
-
-  Subscription.findByPk(subscriptionId, { include: Pago })
-    .then(data => {
-      if (data) {
-        res.send(data);
-      } else {
-        res.status(404).send({
-          message: `Cannot find Cliente with id=${id}.`
-        });
-      }
-    })
-    .catch(err => {
-      res.status(500).send({
-        message: "Error retrieving Cliente with id=" + id
-      });
-    });
-}
-// Delete a Pago with the specified id in the request
+// Delete a ListPayments with the specified id in the request
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Pago.destroy({
+  ListPayments.destroy({
     where: { id: id }
   })
     .then(num => {
       if (num == 1) {
         res.send({
-          message: "Pago was deleted successfully!"
+          message: "ListPayments was deleted successfully!"
         });
       } else {
         res.send({
-          message: `Cannot delete Pago with id=${id}. Maybe Pago was not found!`
+          message: `Cannot delete ListPayments with id=${id}. Maybe ListPayments was not found!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete Pago with id=" + id
+        message: "Could not delete ListPayments with id=" + id
       });
     });
 };
-
 

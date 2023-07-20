@@ -14,6 +14,12 @@ module.exports = function (app) {
     pago.findAll
   );
 
+  app.get(
+    "/api/pagos-subscription/:subscriptionId",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    pago.pagoSubscription
+  );
+
   app.post(
     "/api/pagos",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],

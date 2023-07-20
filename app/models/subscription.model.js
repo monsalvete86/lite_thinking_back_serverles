@@ -1,5 +1,29 @@
 const Processor = require('./processor.model');
 
+function calcularMesesDesdeFecha(fechaInicio) {
+	const fechaActual = new Date();
+	const fechaInicioObj = new Date(fechaInicio);
+
+	const diferenciaEnMilisegundos = fechaActual - fechaInicioObj;
+	const milisegundosEnUnMes = 1000 * 60 * 60 * 24 * 30.4375; // Aproximadamente 30.4375 días por mes
+
+	const mesesTranscurridos = diferenciaEnMilisegundos / milisegundosEnUnMes;
+	return Math.floor(mesesTranscurridos);
+}
+
+function sumarMesesAFecha(fecha, mesesASumar) {
+	const fechaObj = new Date(fecha);
+	const mesActual = fechaObj.getMonth();
+	fechaObj.setMonth(mesActual + mesesASumar);
+
+	// Lidiar con casos especiales si el nuevo mes supera diciembre
+	if (fechaObj.getMonth() !== ((mesActual + mesesASumar) % 12)) {
+		fechaObj.setDate(0); // Establecer el último día del mes previo
+	}
+
+	return fechaObj;
+}
+
 module.exports = (sequelize, Sequelize) => {
 	const Subscription = sequelize.define('subscriptions',
 		{
@@ -114,6 +138,25 @@ module.exports = (sequelize, Sequelize) => {
 				type: Sequelize.DATEONLY,
 				allowNull: false,
 				defaultValue: Sequelize.NOW, // Establece la fecha de creación automáticamente
+			},
+			quotes: {
+				type: Sequelize.VIRTUAL,
+				get() {
+					return calcularMesesDesdeFecha(this.createdAt);
+				},
+				set(value) {
+					throw new Error('No puedes establecer el atributo "quotes".');
+				},
+			},
+			nextPaymentDate: {
+				type: Sequelize.VIRTUAL,
+				get() {
+					fechadePago = sumarMesesAFecha(this.createdAt, calcularMesesDesdeFecha(this.createdAt))
+					return fechadePago;
+				},
+				set(value) {
+					throw new Error('No puedes establecer el atributo "quotes".');
+				},
 			},
 		});
 

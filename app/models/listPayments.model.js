@@ -1,7 +1,6 @@
-const Company = require("./company.model");
 
 module.exports = (sequelize, Sequelize) => {
-  const Pago = sequelize.define("pagos", {
+  const ListPayments = sequelize.define("listPayments", {
     id: {
       primaryKey: true,
       autoIncrement: true,
@@ -37,5 +36,5 @@ module.exports = (sequelize, Sequelize) => {
     },
   });
 
-  return Pago;
+  return ListPayments;
 };

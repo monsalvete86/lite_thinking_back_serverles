@@ -52,7 +52,8 @@ require("./routes/cliente.routes")(app);
 require("./routes/dailyList.routes")(app);  
 require("./routes/processor.routes")(app);  
 require("./routes/subscription.routes")(app);
-require("./routes/pago.routes")(app);  
+require("./routes/pago.routes")(app);
+require("./routes/listPayments.routes")(app);  
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
