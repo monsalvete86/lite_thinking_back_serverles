@@ -9,7 +9,7 @@ provider:
   region: us-east-2
   memorySize: 128
   logRetentionInDays: 1
-  timeout: 30
+  timeout: 300
 
 functions:
   api:
