@@ -109,7 +109,12 @@ module.exports = (sequelize, Sequelize) => {
 					model: require('./processor.model.js')(sequelize, Sequelize),
 					key: 'id'
 				}
-			}
+			},
+			createdAt: {
+				type: Sequelize.DATEONLY,
+				allowNull: false,
+				defaultValue: Sequelize.NOW, // Establece la fecha de creación automáticamente
+			},
 		});
 
 	Subscription.associate = function (models) {
