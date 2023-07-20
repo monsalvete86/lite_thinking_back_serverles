@@ -29,13 +29,21 @@ module.exports = (sequelize, Sequelize) => {
     importe: {
       type: Sequelize.STRING
     },
-    state: {
+    monthlyPayment: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    statePago: {
       type: Sequelize.STRING
     },
     fechaPago: {
       type: Sequelize.STRING
     },
   });
+
+  Pago.associate = function (models) {
+		Pago.belongsTo(models.user, { foreignKey: 'id', sourceKey: 'operatorId' });
+	}
 
   return Pago;
 };

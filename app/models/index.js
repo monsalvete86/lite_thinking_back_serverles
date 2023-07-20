@@ -61,6 +61,7 @@ db.dailyList.hasMany(db.subscription)
 db.dailyList.belongsTo(db.user)
 db.pago.belongsTo(db.cliente, { foreignKey: 'clientId' })
 db.pago.belongsTo(db.subscription, { foreignKey: 'subscriptionId' })
+db.pago.belongsTo(db.user, { foreignKey: 'operatorId' })
 
 db.ROLES = ['user', 'admin', 'moderator'];
 

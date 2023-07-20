@@ -10,8 +10,10 @@ exports.create = (req, res) => {
     clientId: req.body.clientId,
     subscriptionId: req.body.subscriptionId,
     metodoPago: req.body.metodoPago,
+    operatorId: req.body.operatorId,
     importe: req.body.importe,
-    state: req.body.state,
+    monthlyPaymentId: req.body.monthlyPaymentId,
+    statePago: req.body.statePago,
     fechaPago: req.body.fechaPago
   };
 
@@ -35,9 +37,8 @@ exports.findAll = (req, res) => {
 
   ListPayments.findAll({
     where: conditions,
-    include: [
-     // Client,
-     // Subscription,
+    order: [
+      ['fechaPago', 'DESC']
     ]
   })
     .then(data => {
