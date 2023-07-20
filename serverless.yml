@@ -6,7 +6,7 @@ provider:
   runtime: nodejs18.x
   architecture: arm64
   stage: ${opt:stage, 'dev'}
-  region: us-east-1
+  region: us-east-2
   memorySize: 128
   logRetentionInDays: 1
   timeout: 30
