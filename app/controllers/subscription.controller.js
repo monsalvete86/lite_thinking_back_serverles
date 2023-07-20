@@ -123,7 +123,7 @@ exports.findAllWithPayments = (req, res) => {
       {
         model: db.pago,
         where: {
-          state: req.query.state ? req.query.state : 'PAGADO'
+          state: req.query.state
         }
       }
     ]

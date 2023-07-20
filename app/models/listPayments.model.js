@@ -25,11 +25,18 @@ module.exports = (sequelize, Sequelize) => {
     metodoPago: {
       type: Sequelize.STRING
     },
+    operatorId: {
+      type: Sequelize.STRING
+    },
     importe: {
       type: Sequelize.STRING
     },
-    state: {
-      type: Sequelize.STRING
+    monthlyPayment: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    statePago: {
+      type: Sequelize.INTEGER
     },
     fechaPago: {
       type: Sequelize.STRING

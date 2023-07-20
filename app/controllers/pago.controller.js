@@ -1,17 +1,21 @@
 const db = require("../models");
 const Pago = db.pago;
 const Client = db.cliente;
+const Operator = db.user;
 const Subscription = db.subscription;
 const Op = db.Sequelize.Op;
+const sequelize = db.sequelize;
 
 // Create and Save a new Pago
 exports.create = (req, res) => {
   const data = {
     clientId: req.body.clientId,
     subscriptionId: req.body.subscriptionId,
+    operatorId: req.body.operatorId,
     metodoPago: req.body.metodoPago,
     importe: req.body.importe,
-    state: req.body.state,
+    monthlyPayment: req.body.monthlyPayment,
+    statePago: req.body.statePago,
     fechaPago: req.body.fechaPago
   };
 
@@ -31,13 +35,96 @@ exports.create = (req, res) => {
 // Retrieve all Pagos from the database.
 exports.findAll = (req, res) => {
   var conditions = {}
-  conditions.state = req.query.state ? req.query.state : 'PAGADO' 
+  var subscriptionConditions = {
+    [Op.and]: [
+      sequelize.literal(`id IS NOT NULL`)
+    ]
+  }
+  const paymentStateFilter = req.query.paymentStateFilter ?? '';
+  const today = new Date();
+  const month = today.getMonth();
+  const year = today.getFullYear();
+  const currentDay = new Date().getDate();
 
-  Pago.findAll({
+  switch (paymentStateFilter) {
+    case 'PAGADO':
+      const consult = `(
+        SELECT DISTINCT subscriptionId FROM pagos
+        WHERE "subscriptionId" IS NOT NULL
+        AND  statePago = true
+        AND fechaPago BETWEEN '${new Date(year, month, 1).toISOString()}' AND '${new Date(year, month + 1, 0).toISOString()}'
+      )`;
+      conditions.id = {
+        [Op.in]: sequelize.literal(consult)
+      };
+      break;
+
+     case 'PORVENCER':
+      const consultP = `(
+        SELECT DISTINCT subscriptionId FROM pagos
+        WHERE "subscriptionId" IS NOT NULL
+        AND  statePago = true
+        AND fechaPago BETWEEN '${new Date(year, month, 1).toISOString()}' AND '${new Date(year, month + 1, 0).toISOString()}'
+      )`;
+      conditions.id = {
+        [Op.notIn]: sequelize.literal(consultP)
+      };
+
+      conditions = {
+        ...conditions,
+        [Op.and]: [
+          sequelize.literal(`EXTRACT(DAY FROM startCoverage) <= ${currentDay}`), // Día del campo startDate menor o igual al día actual
+          sequelize.literal(`EXTRACT(DAY FROM startCoverage) >= ${currentDay - 5}`), // Día del campo startDate mayor o igual al día actual menos 5 días
+        ],
+      }
+
+
+      break;
+
+    case 'VENCIDO':
+      const consultv = `(
+        SELECT DISTINCT subscriptionId FROM pagos
+        WHERE "subscriptionId" IS NOT NULL
+        AND  statePago = true
+        AND fechaPago BETWEEN '${new Date(year, month, 1).toISOString()}' AND '${new Date(year, month + 1, 0).toISOString()}'
+      )`;
+      conditions.id = {
+        [Op.notIn]: sequelize.literal(consultv)
+      };
+
+      const auxFilterV =  sequelize.literal(`EXTRACT(DAY FROM startCoverage) > ${currentDay}`);
+      conditions = {
+        ...conditions,
+        auxFilterV
+      }
+      break;
+    default:
+      //Declaraciones ejecutadas cuando ninguno de los valores coincide con el valor de la expresión
+      break;
+  }
+  conditions.state = 'ACCEPTED';
+  const currentMonth = new Date();
+  const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+  const lastDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+
+  Subscription.findAll({
     where: conditions,
     include: [
       Client,
-      Subscription
+      Operator,
+      {
+        model: Pago,
+        required: false,
+        where: {
+          fechaPago: {
+            [Op.and]: [
+              { [Op.gte]: firstDayOfMonth }, // Fecha de pago mayor o igual al primer día del mes actual
+              { [Op.lte]: lastDayOfMonth },  // Fecha de pago menor o igual al último día del mes actual
+            ],
+          },
+          statePago: true
+        }
+      },
     ]
   })
     .then(data => {
@@ -99,20 +186,30 @@ exports.update = (req, res) => {
 
 exports.pagoSubscription = (req, res) => {
   let subscriptionId = req.params.subscriptionId
-
-  Subscription.findByPk(subscriptionId, { include: Pago })
+  Pago.findAll({
+    where: {
+      subscriptionId: subscriptionId
+    },
+    include: [
+      Subscription,
+      Operator
+    ],
+    order: [
+      ['fechaPago', 'DESC']
+    ]
+  })
     .then(data => {
       if (data) {
         res.send(data);
       } else {
         res.status(404).send({
-          message: `Cannot find Cliente with id=${id}.`
+          message: `Cannot find Cliente with id=${subscriptionId}.`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving Cliente with id=" + id
+        message: err.message
       });
     });
 }

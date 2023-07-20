@@ -67,5 +67,9 @@ module.exports = (sequelize, Sequelize) => {
     User.hasMany(models.subscriptions, { foreignKey: 'operatorId' })
   }
 
+  User.associate = (models) => {
+    User.hasMany(models.pago, { foreignKey: 'operatorId' })
+  }
+
   return User;
 };
