@@ -38,8 +38,9 @@ exports.create = (req, res) => {
 
 // Retrieve all DailyList from the database.
 exports.findAll = (req, res) => {
-  const from = req.query.from ?? new Date();
-  const to = req.query.to ?? new Date();
+  console.log(req.query)
+  const from = (req.query.from) ?? new Date();
+  const to = (req.query.to) ?? new Date();
 
   var condition = req.query ? {
     date: {
@@ -50,7 +51,7 @@ exports.findAll = (req, res) => {
     }
   } : null;
 
-  DailyList.findAll({ where: condition ,  include: [User]})
+  DailyList.findAll({ where: condition, include: [User] })
     .then((data) => {
       res.send(data);
     })
@@ -121,10 +122,10 @@ exports.delete = (req, res) => {
         return;
       }
 
-      let subscriptions = dailyList.subscriptions.filter(value => 
-        value.state !== "GENERATED"  && value.state !== null
+      let subscriptions = dailyList.subscriptions.filter(value =>
+        value.state !== "GENERATED" && value.state !== null
       )
-      
+
       if (subscriptions.length > 0) {
         res.send(subscriptions)
         console.log('No se puede eliminar la Lista');

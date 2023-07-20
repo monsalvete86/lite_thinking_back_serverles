@@ -134,6 +134,11 @@ module.exports = (sequelize, Sequelize) => {
 					key: 'id'
 				}
 			},
+			createdAt: {
+				type: Sequelize.DATEONLY,
+				allowNull: false,
+				defaultValue: Sequelize.NOW, // Establece la fecha de creación automáticamente
+			},
 			quotes: {
 				type: Sequelize.VIRTUAL,
 				get() {

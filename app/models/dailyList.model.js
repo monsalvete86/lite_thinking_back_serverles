@@ -13,8 +13,13 @@ module.exports = (sequelize, Sequelize) => {
       default: true,
     },
     date: {
-      type: Sequelize.STRING,
+      type: Sequelize.DATEONLY,
       default: null
+    },
+    createdAt: {
+      type: Sequelize.DATEONLY,
+      allowNull: false,
+      defaultValue: Sequelize.NOW, // Establece la fecha de creación automáticamente
     },
     deletedAt: {
       type: Sequelize.DATE,
