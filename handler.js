@@ -71,6 +71,7 @@ var corsOptions = {
     "Content-Type",
     "Accept",
     "Authorization",
+    "x-access-token",
     "token",
     "Access-Control-Request-Method",
     "Access-Control-Request-Headers",
