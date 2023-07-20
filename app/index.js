@@ -7,8 +7,8 @@ const app = express();
 app.use(bodyParser.json({ strict: false }));
 
 var corsOptions = {
-  origin: "https://main.d2a11ffht6x4z4.amplifyapp.com"
-  // origin: "http://localhost:8081",
+  // origin: "https://main.d2a11ffht6x4z4.amplifyapp.com"
+  origin: "http://localhost:8081",
 };
 
 app.use(cors(corsOptions));
