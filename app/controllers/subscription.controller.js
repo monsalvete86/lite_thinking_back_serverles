@@ -192,7 +192,7 @@ exports.delete = (req, res) => {
   const id = req.params.id;
 
   Subscription.destroy({
-    where: { id: id }
+    where: { id: id, state: 'GENERATED' }
   })
     .then(num => {
       if (num == 1) {
@@ -201,7 +201,7 @@ exports.delete = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot delete Subscription with id=${id}. Maybe Subscription was not found!`
+          message: `Cannot delete Subscription with id=${id}. The subscription has already been processed`
         });
       }
     })
