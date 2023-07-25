@@ -1,13 +1,9 @@
 const pago = require("../controllers/pago.controller.js");
 const { authJwt } = require("../middleware/index.js");
 const express = require("express");
-const router = express.Router();
-const pagosController = require("../controllers/pagos.controller");
 
-module.exports = router;
-
-router.put("/cancel/:id", pagosController.cancelPayment);
 module.exports = function (app) {
+
   app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers");
     next();
@@ -15,37 +11,43 @@ module.exports = function (app) {
 
   // Get Pagos
   app.get(
-    "/api/pagos",
+    "/api/pago",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     pago.findAll
   );
 
   app.get(
-    "/api/pagos-subscription/:subscriptionId",
+    "/api/pago-subscription/:subscriptionId",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     pago.pagoSubscription
   );
 
   app.post(
-    "/api/pagos",
+    "/api/pago",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     pago.create
   );
 
   app.get(
-    "/api/pagos/:id",
+    "/api/pago/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     pago.findOne
   );
 
   app.put(
-    "/api/pagos/:id",
+    "/api/pago/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     pago.update
   );
 
+  app.put(
+    "/cancel/:id",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    pago.cancelPayment
+  );
+
   app.delete(
-    "/api/pagos/:id",
+    "/api/pago/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     pago.delete
   );

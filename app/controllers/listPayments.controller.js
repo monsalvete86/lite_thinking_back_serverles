@@ -125,8 +125,9 @@ exports.delete = (req, res) => {
 exports.cancelPayment = (req, res) => {
   const id = req.params.id;
 
-  // Aquí, implementamos la lógica para inactivar el estado del pago
-  ListPayments.update({ statePago: false }, { where: { id: id } })
+  ListPayments.update({ statePago: false }, {
+    where: { id: id }
+  })
     .then((num) => {
       if (num == 1) {
         res.send({
