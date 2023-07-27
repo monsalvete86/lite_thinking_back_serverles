@@ -3,9 +3,8 @@ const { authJwt } = require("../middleware/index.js");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
-    res.header(
-      "Access-Control-Allow-Headers"
-    );
+    res.header("Access-Control-Allow-Origin", "*");
+  
     next();
   });
 
