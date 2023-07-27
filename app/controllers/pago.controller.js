@@ -40,7 +40,8 @@ exports.findAll = (req, res) => {
       sequelize.literal(`id IS NOT NULL`)
     ]
   }
-  const paymentStateFilter = req.query.paymentStateFilter ?? '';
+
+  const paymentStateFilter = req.params.paymentStateFilter != 'empty' ? req.params.paymentStateFilter : '';
   const today = new Date();
   const month = today.getMonth();
   const year = today.getFullYear();

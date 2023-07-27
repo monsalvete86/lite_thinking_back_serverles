@@ -11,7 +11,7 @@ module.exports = function (app) {
 
   // Get Pagos
   app.get(
-    "/api/pago",
+    "/api/pago/:paymentStateFilter",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     pago.findAll
   );
@@ -35,11 +35,17 @@ module.exports = function (app) {
   );
 
   app.put(
-    "/cancel/:id",
+    "/api/pago/:id",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    pago.update
+  );
+/*
+  app.put(
+    "api/cancel/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     listPaymentsController.cancelPayment
   );
-
+*/
   app.delete(
     "/api/pago/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],

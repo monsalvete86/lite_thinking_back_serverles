@@ -9,19 +9,19 @@ module.exports = function (app) {
 
   // Get ListPayments
   app.get(
-    "/api/listPayments",
+    "/api/listPayments/:state/:paymentStateFilter",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     listPayments.findAll
   );
 
   app.post(
     "/api/listPayments",
-    [(authJwt.verifyToken, authJwt.isModeratorOrAdmin)],
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     listPayments.create
   );
 
   app.get(
-    "/api/listPayments",
+    "/api/listPayments/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     listPayments.findOne
   );
