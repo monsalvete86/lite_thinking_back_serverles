@@ -44,16 +44,16 @@ app.get("/", (req, res) => {
 
 // routes
 require("./routes/auth.routes")(app);
-require("./routes/role.routes")(app);  
+require("./routes/role.routes")(app);
 require("./routes/user.routes")(app);
 require("./routes/company.routes")(app);
 require("./routes/product.routes")(app);
 require("./routes/cliente.routes")(app);
-require("./routes/dailyList.routes")(app);  
-require("./routes/processor.routes")(app);  
+require("./routes/dailyList.routes")(app);
+require("./routes/processor.routes")(app);
 require("./routes/subscription.routes")(app);
 require("./routes/pago.routes").default(app);
-require("./routes/listPayments.routes")(app);  
+require("./routes/listPayments.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

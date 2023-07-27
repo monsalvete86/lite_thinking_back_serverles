@@ -30,7 +30,7 @@ module.exports = function (app) {
     "/api/subscriptions/bulk-create",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     subscription.bulkCreate
-  ); 
+  );
 
   app.post(
     "/api/subscriptions",

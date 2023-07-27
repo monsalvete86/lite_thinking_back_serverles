@@ -1,6 +1,6 @@
 const pago = require("../controllers/pago.controller.js");
+const listPaymentsController = require("../controllers/listPayments.controller.js");
 const { authJwt } = require("../middleware/index.js");
-const express = require("express");
 
 module.exports = function (app) {
 
@@ -35,15 +35,9 @@ module.exports = function (app) {
   );
 
   app.put(
-    "/api/pago/:id",
-    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    pago.update
-  );
-
-  app.put(
     "/cancel/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    pago.cancelPayment
+    listPaymentsController.cancelPayment
   );
 
   app.delete(

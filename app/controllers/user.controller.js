@@ -7,7 +7,7 @@ var bcrypt = require("bcryptjs");
 
 
 exports.allAccess = (req, res) => {
-  return "Public Content.";
+  res.send({message: "Public Content."});
 };
 
 exports.create = (req, res) => {
