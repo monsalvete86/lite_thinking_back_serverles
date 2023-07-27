@@ -61,7 +61,7 @@ exports.findAll = (req, res) => {
   var conditions = {}
 
   if (req.userId) { conditions.operatorId = req.userId }
-  if (req.query.state) { conditions.state = req.query.state ? req.query.state : 'ACCEPTED' }
+  if (req.query.state) { conditions.state = req.query?.state != '' ? req.query.state : 'ACCEPTED' }
 
   Subscription.findAll({
     where: conditions,

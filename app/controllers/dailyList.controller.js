@@ -38,7 +38,6 @@ exports.create = (req, res) => {
 
 // Retrieve all DailyList from the database.
 exports.findAll = (req, res) => {
-  console.log(req.query)
   const from = (req.query.from) ?? new Date();
   const to = (req.query.to) ?? new Date();
 
