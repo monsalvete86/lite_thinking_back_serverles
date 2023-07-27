@@ -41,10 +41,7 @@ exports.signup = (req, res) => {
     });
 };
 
-exports.signin = (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-  res.header('Access-Control-Allow-Credentials', true); 
+exports.signin = (req, res) => { 
   /*res.header("Access-Control-Allow-Methods", "*");
   res.header("Content-Type", "application/json");*/
   //res.header("Accept", "application/json");
