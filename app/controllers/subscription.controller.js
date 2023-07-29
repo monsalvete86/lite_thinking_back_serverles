@@ -42,6 +42,8 @@ exports.create = (req, res) => {
 exports.bulkCreate = (req, res) => {
   const data = req.body;
 
+  console.log('isChangingbulkCreate')
+
   Subscription.bulkCreate(data, {
     fields: ["id", "operatorId", "clientId", "dailyListId"],
     updateOnDuplicate: ["operatorId"]
@@ -67,13 +69,7 @@ exports.findAll = (req, res) => {
     where: conditions,
     include: [
       Client,
-      Operator,
-      {
-        model: db.dailyList,
-        where: {
-          date: today()
-        }
-      }
+      Operator
     ]
   })
     .then(data => {
