@@ -136,33 +136,28 @@ module.exports = (sequelize, Sequelize) => {
 			},
 			createdAt: {
 				type: Sequelize.DATEONLY,
-				allowNull: false,
-				defaultValue: Sequelize.NOW, // Establece la fecha de creación automáticamente
+				allowNull: false // Establece la fecha de creación automáticamente
 			},
 			quotes: {
 				type: Sequelize.VIRTUAL,
 				get() {
-					return calcularMesesDesdeFecha(this.createdAt);
-				},
-				// set(value) {
-				// 	throw new Error('No puedes establecer el atributo "quotes".');
-				// },
+					const initialDate = this.createdAt
+					return calcularMesesDesdeFecha(initialDate);
+				}
 			},
 			nextPaymentDate: {
 				type: Sequelize.VIRTUAL,
 				get() {
-					fechadePago = sumarMesesAFecha(this.createdAt, calcularMesesDesdeFecha(this.createdAt))
+					const initialDate = this.createdAt
+					fechadePago = sumarMesesAFecha(initialDate, calcularMesesDesdeFecha(initialDate))
 					return fechadePago;
-				},
-				// set(value) {
-				// 	throw new Error('No puedes establecer el atributo "quotes".');
-				// },
+				}
 			},
 		});
 
 	Subscription.associate = function (models) {
 		Subscription.belongsTo(models.user, { foreignKey: 'id', sourceKey: 'operatorId' });
 	}
-
+	console.log(Subscription)
 	return Subscription;
 };
