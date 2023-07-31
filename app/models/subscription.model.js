@@ -158,6 +158,6 @@ module.exports = (sequelize, Sequelize) => {
 	Subscription.associate = function (models) {
 		Subscription.belongsTo(models.user, { foreignKey: 'id', sourceKey: 'operatorId' });
 	}
-	console.log(Subscription)
+
 	return Subscription;
 };
