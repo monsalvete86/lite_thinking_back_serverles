@@ -42,6 +42,8 @@ exports.create = (req, res) => {
 exports.bulkCreate = (req, res) => {
   const data = req.body;
 
+  console.log('isChangingbulkCreate')
+
   Subscription.bulkCreate(data, {
     fields: ["id", "operatorId", "clientId", "dailyListId"],
     updateOnDuplicate: ["operatorId"]
@@ -61,19 +63,13 @@ exports.findAll = (req, res) => {
   var conditions = {}
 
   if (req.userId) { conditions.operatorId = req.userId }
-  if (req.query.state) { conditions.state = req.query.state ? req.query.state : 'ACCEPTED' }
+  if (req.query.state) { conditions.state = req.query?.state != '' ? req.query.state : 'ACCEPTED' }
 
   Subscription.findAll({
     where: conditions,
     include: [
       Client,
-      Operator,
-      {
-        model: db.dailyList,
-        where: {
-          date: today()
-        }
-      }
+      Operator
     ]
   })
     .then(data => {
@@ -192,7 +188,7 @@ exports.delete = (req, res) => {
   const id = req.params.id;
 
   Subscription.destroy({
-    where: { id: id }
+    where: { id: id, state: 'GENERATED' }
   })
     .then(num => {
       if (num == 1) {
@@ -201,7 +197,7 @@ exports.delete = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot delete Subscription with id=${id}. Maybe Subscription was not found!`
+          message: `Cannot delete Subscription with id=${id}. The subscription has already been processed`
         });
       }
     })

@@ -4,8 +4,8 @@ const cors = require("cors");
 const app = express();
 
 var corsOptions = {
-  // origin: "https://main.d8b91iarqpg5.amplifyapp.com"
-  origin: "http://localhost:8081",
+  origin: "https://main.d2a11ffht6x4z4.amplifyapp.com"
+  // origin: "http://localhost:8081",
 };
 
 app.use(cors(corsOptions));
@@ -19,7 +19,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-// parse requests of content-type - application/json
+// parse requests of content-type - application/json 
 app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = require("./app/models");
 const Role = db.role;
 
-// db.sequelize.sync();
+// db.sequelize.sync(); 
 // force: true will drop the table if it already exists
 // db.sequelize.sync({force: true}).then(() => {
 //   console.log('Drop and Resync Database with { force: true }');
@@ -52,6 +52,7 @@ require("./app/routes/dailyList.routes")(app);
 require("./app/routes/processor.routes")(app);
 require("./app/routes/subscription.routes")(app);
 require("./app/routes/pago.routes")(app);
+require("./app/routes/listPayments.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

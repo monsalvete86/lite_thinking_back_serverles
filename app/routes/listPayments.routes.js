@@ -3,23 +3,25 @@ const { authJwt } = require("../middleware/index.js");
 
 module.exports = function (app) {
   app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Headers");
+    res.header("Access-Control-Allow-Origin", "*");
     next();
   });
 
   // Get ListPayments
   app.get(
-    "/api/listPayments"   [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    "/api/listPayments/:state/:paymentStateFilter",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     listPayments.findAll
   );
 
   app.post(
-    "/api/listPayments"   [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
+    "/api/listPayments",
+    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     listPayments.create
   );
 
   app.get(
-    "/api/listPayments",
+    "/api/listPayments/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     listPayments.findOne
   );

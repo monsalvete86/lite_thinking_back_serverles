@@ -38,7 +38,6 @@ exports.create = (req, res) => {
 
 // Retrieve all DailyList from the database.
 exports.findAll = (req, res) => {
-  console.log(req.query)
   const from = (req.query.from) ?? new Date();
   const to = (req.query.to) ?? new Date();
 
@@ -127,7 +126,7 @@ exports.delete = (req, res) => {
       )
 
       if (subscriptions.length > 0) {
-        res.send(subscriptions)
+        res.send({ message: 'No se puede eliminar la Lista porque contiene suscripciones procesadas', data: subscriptions })
         console.log('No se puede eliminar la Lista');
       } else {
         dailyList.destroy()

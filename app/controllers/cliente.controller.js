@@ -34,7 +34,7 @@ exports.create = (req, res) => {
     });
 };
 // Retrieve all Clientes from the database.
-exports.findAll = (req, res) => {
+exports.findAll = (req, res) => { 
   const nombre = req.query.nombre;
   var condition = nombre ? { nombre: { [Op.like]: `%${nombre}%` } } : null;
 
