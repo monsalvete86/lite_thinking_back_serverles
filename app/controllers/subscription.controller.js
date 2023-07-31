@@ -42,8 +42,6 @@ exports.create = (req, res) => {
 exports.bulkCreate = (req, res) => {
   const data = req.body;
 
-  console.log('isChangingbulkCreate')
-
   Subscription.bulkCreate(data, {
     fields: ["id", "operatorId", "clientId", "dailyListId"],
     updateOnDuplicate: ["operatorId"]
