@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new Cliente
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.nombre || !req.body.apellido || !req.body.telefono || !req.body.direccion || !req.body.ciudad) {
+  if (!req.body.nombre || !req.body.apellido || !req.body.apellido_2 || !req.body.telefono || !req.body.direccion || !req.body.ciudad) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -16,6 +16,7 @@ exports.create = (req, res) => {
   const cliente = {
     nombre: req.body.nombre,
     apellido: req.body.apellido,
+    apellido_2: req.body.apellido_2,
     telefono: req.body.telefono,
     direccion: req.body.direccion,
     ciudad: req.body.ciudad,
