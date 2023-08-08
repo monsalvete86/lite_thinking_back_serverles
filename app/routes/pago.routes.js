@@ -1,5 +1,4 @@
 const pago = require("../controllers/pago.controller.js");
-const listPaymentsController = require("../controllers/listPayments.controller.js");
 const { authJwt } = require("../middleware/index.js");
 
 module.exports = function (app) {
@@ -39,13 +38,7 @@ module.exports = function (app) {
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
     pago.update
   );
-/*
-  app.put(
-    "api/cancel/:id",
-    [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
-    listPaymentsController.cancelPayment
-  );
-*/
+
   app.delete(
     "/api/pago/:id",
     [authJwt.verifyToken, authJwt.isModeratorOrAdmin],
